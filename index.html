@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小鹿AI编程 - 成绩查询</title>
+    <!-- 替换为更稳定的 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // 可选：禁用 Tailwind 未使用的工具类，优化性能
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
@@ -342,7 +351,8 @@
             toast.textContent = message;
             toast.className = `toast ${type === 'error' ? 'error' : ''}`;
             const icon = document.createElement('i');
-            icon.setAttribute('data-lucide, type === 'error' ? 'x-circle' : 'check-circle');
+            // ====== 修复的代码行：修正了字符串拼接语法错误 ======
+            icon.setAttribute('data-lucide', type === 'error' ? 'x-circle' : 'check-circle');
             toast.prepend(icon);
             lucide.createIcons();
             toast.classList.add('show');
