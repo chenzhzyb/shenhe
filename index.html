@@ -768,50 +768,90 @@
                 searchIcon.style.animation = 'spin 1s linear infinite';
             }
             
-            try {
-                // 1. 发起请求到公开接口
-                const response = await fetch(PUBLIC_SHEETS_API_URL);
-                if (!response.ok) {
-                    throw new Error(`数据获取失败 (状态码: ${response.status})。请检查表格ID、分享权限和网络。`);
+            // 本地备份数据
+            const backupData = [
+                { name: "梓轩", result: "科特种子班通过" },
+                { name: "陈章", result: "科特种子班通过" },
+                { name: "浩然", result: "科特种子班通过" },
+                { name: "宇辰", result: "科特种子班通过" },
+                { name: "俊熙", result: "思维赛考班通过" },
+                { name: "星睿", result: "思维赛考班通过" }
+            ];
+            
+            let isApiSuccess = false;
+            let retryCount = 0;
+            const maxRetries = 3;
+            const timeoutMs = 30000; // 30秒超时
+            
+            // 实现超时功能的辅助函数
+            const fetchWithTimeout = (url, options = {}) => {
+                return Promise.race([
+                    fetch(url, options),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('请求超时')), timeoutMs)
+                    )
+                ]);
+            };
+            
+            while (retryCount < maxRetries && !isApiSuccess) {
+                try {
+                    retryCount++;
+                    console.log(`[数据加载日志] 尝试第 ${retryCount} 次从API获取数据...`);
+                    
+                    // 1. 发起带超时的请求到公开接口
+                    const response = await fetchWithTimeout(PUBLIC_SHEETS_API_URL);
+                    if (!response.ok) {
+                        throw new Error(`数据获取失败 (状态码: ${response.status})`);
+                    }
+                    
+                    // 2. 解析返回的JSON数据
+                    const rawData = await response.json();
+                    console.log('[数据加载日志] 从API获取的原始数据:', rawData);
+                    
+                    // 3. 转换数据格式
+                    const parsedData = rawData.map(row => ({
+                        name: row["姓名"]?.trim() || '',
+                        result: row["审核结果"]?.trim() || ''
+                    })).filter(item => item.name && item.result); // 过滤无效数据
+                    
+                    if (parsedData.length === 0) {
+                        throw new Error('解析后的数据为空');
+                    }
+                    
+                    // 4. 数据加载成功
+                    studentData = parsedData;
+                    isApiSuccess = true;
+                    
+                    console.log(`[数据加载日志] API数据加载成功，共 ${studentData.length} 条记录，重试次数: ${retryCount-1}`);
+                    showToast('名单数据已更新', 'success');
+                    break;
+                    
+                } catch (error) {
+                    console.error(`[数据加载日志] 第 ${retryCount} 次API请求失败:`, error.message);
+                    
+                    if (retryCount >= maxRetries) {
+                        // 所有重试都失败
+                        console.error(`[数据加载日志] API请求全部失败，切换到本地备份数据`);
+                        studentData = backupData;
+                        showToast('使用本地备份数据', 'success');
+                        break;
+                    }
+                    
+                    // 等待一段时间后重试
+                    const waitTime = Math.pow(2, retryCount) * 1000; // 指数退避策略
+                    console.log(`[数据加载日志] 将在 ${waitTime}ms 后重试...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
                 }
-                
-                // 2. 解析返回的JSON数据
-                // 接口返回格式即为数组： [ {姓名列名: "张三", 结果列名: "通过"}, ... ]
-                const rawData = await response.json();
-                console.log('从接口获取的原始数据:', rawData);
-
-                // 3. 转换数据格式（适配你网站的查询逻辑）
-                // 假设你的表格列名是"姓名"和"审核结果"
-                studentData = rawData.map(row => ({
-                    name: row["姓名"]?.trim() || '',   // 根据你的实际列名修改 "姓名"
-                    result: row["审核结果"]?.trim() || '' // 根据你的实际列名修改 "审核结果"
-                }));
-
-                console.log(`成功加载 ${studentData.length} 条学生数据。`);
-                // 显示成功提示
-                showToast('名单数据已更新', 'success');
-
-            } catch (error) {
-                console.error('从表格加载数据失败:', error);
-                // 调用错误提示
-                showToast(`数据加载失败: ${error.message}`, 'error');
-                // 使用本地备份数据，防止网站完全无法使用
-                studentData = [
-                    { name: "梓轩", result: "科特种子班通过" },
-                    { name: "陈章", result: "科特种子班通过" },
-                    { name: "浩然", result: "科特种子班通过" },
-                    { name: "宇辰", result: "科特种子班通过" },
-                    { name: "俊熙", result: "思维赛考班通过" },
-                    { name: "星睿", result: "思维赛考班通过" }
-                ];
-                showToast('使用本地备份数据', 'success');
-            } finally {
-                // 恢复搜索图标
-                if (searchIcon) {
-                    searchIcon.setAttribute('data-lucide', 'search');
-                    searchIcon.style.animation = '';
-                    lucide.createIcons();
-                }
+            }
+            
+            // 记录最终数据来源
+            console.log(`[数据加载日志] 数据加载完成，来源: ${isApiSuccess ? 'API' : '本地备份'}，数据条数: ${studentData.length}`);
+            
+            // 恢复搜索图标
+            if (searchIcon) {
+                searchIcon.setAttribute('data-lucide', 'search');
+                searchIcon.style.animation = '';
+                lucide.createIcons();
             }
         }
 
