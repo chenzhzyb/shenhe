@@ -808,11 +808,21 @@
                     const rawData = await response.json();
                     console.log('[数据加载日志] 从API获取的原始数据:', rawData);
                     
-                    // 3. 转换数据格式
-                    const parsedData = rawData.map(row => ({
-                        name: row["姓名"]?.trim() || '',
-                        result: row["审核结果"]?.trim() || ''
-                    })).filter(item => item.name && item.result); // 过滤无效数据
+                    // 3. 转换数据格式 - opensheet.elk.sh返回直接的JSON数组
+                    const parsedData = rawData
+                        .map(row => {
+                            // 处理不同可能的列名格式
+                            const name = row["姓名"] || row["name"] || row["Name"] || '';
+                            const result = row["审核结果"] || row["result"] || row["Result"] || '';
+                            return {
+                                name: String(name).trim(),
+                                result: String(result).trim()
+                            };
+                        })
+                        .filter(item => item.name && item.result); // 过滤无效数据
+                    
+                    // 4. 验证解析结果
+                    console.log('[数据解析日志] 原始数据行数:', rawData.length, '解析后有效数据行数:', parsedData.length);
                     
                     if (parsedData.length === 0) {
                         throw new Error('解析后的数据为空');
