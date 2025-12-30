@@ -16,6 +16,7 @@
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
             --accent-color: #06b6d4;
+            --success-color: #22c55e;
             --background-color: #0f172a;
             --card-background: #1e293b;
             --text-color: #f8fafc;
@@ -104,14 +105,16 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 0.75rem 2rem;
+            padding: 0.875rem 2rem;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             font-weight: 600;
+            font-size: 1.125rem;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary::before {
@@ -121,7 +124,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s ease;
         }
 
@@ -130,12 +133,17 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
         }
 
         .hidden {
@@ -272,19 +280,12 @@
 
         .result-icon {
             position: relative;
+            display: inline-block;
         }
 
-        .result-icon::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120%;
-            height: 120%;
-            background-color: rgba(34, 197, 94, 0.2);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+        .result-icon i {
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes pulse {
@@ -493,6 +494,26 @@
             }
         }
 
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
         /* 弹窗响应式设计 */
         @media (max-width: 640px) {
             .modal-content {
@@ -613,13 +634,13 @@
             </div>
             <div class="modal-body">
                 <div class="modal-icon">
-                    <i data-lucide="camera"></i>
+                    <i data-lucide="camera" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <h3 class="modal-title">温馨提示</h3>
-                <p class="modal-text">把本页截图给班主任老师办理进班手续吧</p>
+                <h3 class="modal-title text-2xl font-bold text-white">📸 温馨提示</h3>
+                <p class="modal-text text-gray-300 leading-relaxed">把本页截图给班主任老师办理进班手续吧</p>
             </div>
             <div class="modal-footer">
-                <button id="modal-ok-btn" class="btn-primary">确定</button>
+                <button id="modal-ok-btn" class="btn-primary px-8 py-3 text-lg font-semibold">确定</button>
             </div>
         </div>
     </div>
@@ -633,44 +654,45 @@
         <div class="logo-container floating">
             <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程">
         </div>
-        <h1 class="text-3xl font-bold text-center mb-6">成绩查询</h1>
-        <p class="text-center text-gray-400 mb-8">请输入学生姓名，查询审核结果</p>
+        <h1 class="text-3xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">成绩查询</h1>
+        <p class="text-center text-gray-400 mb-8 text-sm leading-relaxed">请输入学生姓名，查询审核结果</p>
 
         <div id="search-container">
             <div class="input-container">
-                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off">
-                <i data-lucide="search" class="icon"></i>
+                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off" class="focus:ring-2 focus:ring-blue-500">
+                <i data-lucide="search" class="icon text-gray-500"></i>
             </div>
-            <button id="search-btn" class="btn-primary w-full">查询</button>
+            <button id="search-btn" class="btn-primary w-full mt-4 py-3 text-lg">查询</button>
         </div>
 
-        <div id="result-card" class="hidden mt-8 p-6 bg-gray-800 rounded-lg relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        <div id="result-card" class="hidden mt-8 p-8 bg-gray-800 rounded-lg relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
             <div class="text-center">
-                <div class="result-icon inline-block">
-                    <i data-lucide="check-circle" class="inline-block w-16 h-16 text-green-500 mb-4"></i>
+                <div class="result-icon inline-block mb-6">
+                    <i data-lucide="check-circle" class="inline-block w-24 h-24 text-green-500 drop-shadow-lg"></i>
                 </div>
-                <h2 class="text-2xl font-bold mb-2">恭喜 <span id="student-name"></span>！</h2>
-                <p class="text-xl text-green-400 font-semibold" id="result-message"></p>
-                <div class="mt-6">
-                    <div class="inline-block px-4 py-2 bg-green-900/30 text-green-300 rounded-full text-sm">
-                        <i data-lucide="award" class="inline-block w-4 h-4 mr-1"></i>
-                        审核通过
-                    </div>
+                <h2 class="text-2xl font-bold mb-4 text-green-400">🎉 恭喜审核通过！</h2>
+                <h3 class="text-xl font-semibold mb-3 text-white">恭喜 <span id="student-name"></span> 同学</h3>
+                <p class="text-lg text-gray-300 mb-6 font-medium" id="result-message"></p>
+                <div class="inline-block px-6 py-3 bg-green-900/40 text-green-300 rounded-full text-base font-medium shadow-lg">
+                    <i data-lucide="award" class="inline-block w-5 h-5 mr-2"></i>
+                    审核通过
                 </div>
+                
             </div>
         </div>
     </div>
 
     <script>
-        const studentData = [
-            { name: "梓轩", result: "科特种子班通过" },
-            { name: "陈章", result: "科特种子班通过" },
-            { name: "浩然", result: "科特种子班通过" },
-            { name: "宇辰", result: "科特种子班通过" },
-            { name: "俊熙", result: "思维赛考班通过" },
-            { name: "星睿", result: "思维赛考班通过" }
-        ];
+        // ==================== 配置区域 START ====================
+        // TODO: cm6HRAQaUE5Z！
+        const SHEET_ID = 'cm6HRAQaUE5Z'; // 例如：从地址栏 `https://www.kdocs.cn/l/cm6HRAQaUE5Z`  中提取
+        // TODO: 调整数据范围，例如 A:B 表示读取A列和B列的全部数据。如果你的数据在100行以内，也可以设为 A1:B100
+        const DATA_RANGE = 'A:B';
+        // ==================== 配置区域 END ====================
+
+        // 全局变量，用于存储从表格获取的数据
+        let studentData = [];
 
         const nameInput = document.getElementById('name-input');
         const searchBtn = document.getElementById('search-btn');
@@ -806,18 +828,75 @@
             }
         }
 
+        /**
+         * 从金山文档表格获取数据的主函数
+         */
+        async function fetchDataFromKingsoftSheet() {
+            try {
+                // 1. 构造金山文档的公开API地址（无需认证，但表格需设为“可查看”）
+                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
+                
+                // 2. 发起网络请求
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`表格数据获取失败，状态码: ${response.status}`);
+                }
+                
+                // 3. 解析返回的JSON数据
+                const jsonData = await response.json();
+                console.log('从API返回的原始数据:', jsonData); // 调试用，了解数据结构
+
+                // 4. 处理数据：将表格的二维数组转换为对象数组
+                // 假设API返回格式为 { cells: [ [表头1, 表头2], [数据1行1, 数据1行2], ... ] }
+                const rows = jsonData.cells || [];
+                if (rows.length < 2) {
+                    console.warn('表格数据为空或仅包含表头');
+                    studentData = [];
+                    return;
+                }
+
+                // 跳过第一行表头（如果第一行是数据，则改为 rows.slice(0)）
+                const dataRows = rows.slice(1);
+                
+                // 转换为网站需要的格式：{ name: 'xxx', result: 'xxx' }
+                studentData = dataRows.map(row => ({
+                    name: String(row[0] || '').trim(),   // A列：姓名，去除首尾空格
+                    result: String(row[1] || '').trim()  // B列：结果
+                }));
+
+                console.log('数据转换成功，共', studentData.length, '条记录:', studentData);
+
+            } catch (error) {
+                console.error('加载表格数据时发生严重错误:', error);
+                // 可选：在这里可以设置一个友好的用户提示，或加载一个本地备份数据
+                // studentData = [...]; // 备份数据
+            }
+        }
+
         function searchStudent() {
             const name = nameInput.value.trim();
             if (!name) {
-                showToast('请输入学生姓名', 'error');
+                // 更新弹窗文案
+                const modalText = document.querySelector('.modal-text');
+                modalText.textContent = '请输入学生姓名';
+                
+                // 显示弹窗
+                infoModal.classList.remove('hidden');
+                setTimeout(() => {
+                    infoModal.classList.add('show');
+                }, 10);
                 return;
             }
 
             const student = studentData.find(s => s.name === name);
 
             if (student) {
+                // 先更新内容
                 studentNameEl.textContent = student.name;
                 resultMessageEl.textContent = student.result;
+                
+                // 确保resultCard在正确的状态
+                resultCard.classList.remove('show');
                 
                 gsap.to(searchContainer, {
                     opacity: 0,
@@ -829,8 +908,20 @@
                         backButton.classList.remove('hidden');
                         lucide.createIcons();
                         
+                        // 重置resultCard的transform状态
+                        gsap.set(resultCard, { opacity: 0, y: 20 });
+                        
                         setTimeout(() => {
-                            resultCard.classList.add('show');
+                            // 显示结果卡片
+                            gsap.to(resultCard, {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.5,
+                                onComplete: () => {
+                                    resultCard.classList.add('show');
+                                }
+                            });
+                            
                             createConfetti();
                             
                             // 添加卡片发光效果
@@ -856,17 +947,26 @@
                     }
                 });
             } else {
-                showToast('未找到该学生信息', 'error');
                 // 添加输入框震动效果
                 gsap.fromTo(nameInput, 
                     { x: 0 },
-                    { 
+                    {
                         x: 10, 
                         duration: 0.1, 
                         repeat: 5, 
                         yoyo: true,
                         onComplete: () => {
                             gsap.set(nameInput, { x: 0 });
+                            
+                            // 更新弹窗文案
+                            const modalText = document.querySelector('.modal-text');
+                            modalText.textContent = '未找到该学生信息';
+                            
+                            // 显示弹窗
+                            infoModal.classList.remove('hidden');
+                            setTimeout(() => {
+                                infoModal.classList.add('show');
+                            }, 10);
                         }
                     }
                 );
@@ -901,34 +1001,23 @@
             }, 300);
         }
 
-        searchBtn.addEventListener('click', searchStudent);
-        nameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                searchStudent();
-            }
-        });
-        
-        backButton.addEventListener('click', resetSearch);
-        resultCard.addEventListener('click', resetSearch);
-        
-        // 弹窗确定按钮点击事件
-        modalOkBtn.addEventListener('click', closeModal);
-        
-        // 点击弹窗背景关闭弹窗
-        infoModal.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-backdrop')) {
-                closeModal();
-            }
-        });
-
-        // 页面加载动画
-        window.addEventListener('DOMContentLoaded', () => {
+        /**
+         * 页面初始化
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完毕，开始初始化...');
+            
+            // 1. 加载表格数据
+            fetchDataFromKingsoftSheet();
+            
+            // 2. 创建星空背景和粒子效果
             createStars();
             initThreeScene();
             
+            // 3. 页面加载动画
             gsap.fromTo('.card', 
                 { opacity: 0, y: 50 },
-                { 
+                {
                     opacity: 1, 
                     y: 0, 
                     duration: 1, 
@@ -956,36 +1045,65 @@
                 { opacity: 0 },
                 { opacity: 1, duration: 0.8, delay: 0.5 }
             );
-        });
-
-        // 为输入框添加清除功能
-        nameInput.addEventListener('input', () => {
-            if (nameInput.value) {
-                const clearIcon = document.querySelector('.icon');
-                clearIcon.setAttribute('data-lucide', 'x');
-                lucide.createIcons();
-                clearIcon.addEventListener('click', () => {
-                    nameInput.value = '';
+            
+            // 4. 绑定查询按钮的点击事件
+            if (searchBtn) {
+                searchBtn.addEventListener('click', searchStudent);
+            }
+            
+            // 5. 绑定输入框的回车事件
+            if (nameInput) {
+                nameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchStudent();
+                    }
+                });
+            }
+            
+            backButton.addEventListener('click', resetSearch);
+            resultCard.addEventListener('click', resetSearch);
+            
+            // 弹窗确定按钮点击事件
+            modalOkBtn.addEventListener('click', closeModal);
+            
+            // 点击弹窗背景关闭弹窗
+            infoModal.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-backdrop')) {
+                    closeModal();
+                }
+            });
+            
+            // 为输入框添加清除功能
+            nameInput.addEventListener('input', () => {
+                if (nameInput.value) {
+                    const clearIcon = document.querySelector('.icon');
+                    clearIcon.setAttribute('data-lucide', 'x');
+                    lucide.createIcons();
+                    clearIcon.addEventListener('click', () => {
+                        nameInput.value = '';
+                        clearIcon.setAttribute('data-lucide', 'search');
+                        lucide.createIcons();
+                    });
+                } else {
+                    const clearIcon = document.querySelector('.icon');
                     clearIcon.setAttribute('data-lucide', 'search');
                     lucide.createIcons();
-                });
-            } else {
-                const clearIcon = document.querySelector('.icon');
-                clearIcon.setAttribute('data-lucide', 'search');
-                lucide.createIcons();
-            }
-        });
-
-        // 添加鼠标移动视差效果
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth - 0.5;
-            const mouseY = e.clientY / window.innerHeight - 0.5;
-            
-            gsap.to('.card', {
-                x: mouseX * 10,
-                y: mouseY * 10,
-                duration: 0.5
+                }
             });
+            
+            // 添加鼠标移动视差效果
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX / window.innerWidth - 0.5;
+                const mouseY = e.clientY / window.innerHeight - 0.5;
+                
+                gsap.to('.card', {
+                    x: mouseX * 10,
+                    y: mouseY * 10,
+                    duration: 0.5
+                });
+            });
+            
+            console.log('初始化完成，网站已准备就绪。');
         });
     </script>
 </body>
