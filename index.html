@@ -7,867 +7,290 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.140.1/build/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #06b6d4;
-            --success-color: #22c55e;
-            --background-color: #0f172a;
-            --card-background: #1e293b;
-            --text-color: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --primary-color: #6366f1; --secondary-color: #8b5cf6; --accent-color: #06b6d4;
+            --background-color: #0f172a; --card-background: #1e293b;
+            --text-color: #f8fafc; --text-secondary: #cbd5e1;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
+            background-color: var(--background-color); color: var(--text-color);
+            line-height: 1.6; overflow-x: hidden; min-height: 100vh;
         }
-
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .bg-gradient {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        }
-
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
         .card {
-            background-color: var(--card-background);
-            border-radius: 1rem;
+            background-color: var(--card-background); border-radius: 1rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1.5rem;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .input-container {
-            position: relative;
-            margin: 2rem 0;
-        }
-
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .input-container { position: relative; margin: 2rem 0; }
         .input-container input {
-            width: 100%;
-            padding: 1rem 3rem 1rem 1rem;
-            border: 2px solid #334155;
-            border-radius: 0.5rem;
-            background-color: rgba(30, 41, 59, 0.7);
-            color: var(--text-color);
-            font-size: 1.1rem;
+            width: 100%; padding: 1rem 3rem 1rem 1rem; border: 2px solid #334155; border-radius: 0.5rem;
+            background-color: rgba(30, 41, 59, 0.7); color: var(--text-color); font-size: 1.1rem;
             transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         }
-
         .input-container input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            background-color: rgba(30, 41, 59, 0.9);
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); background-color: rgba(30, 41, 59, 0.9);
         }
-
         .input-container .icon {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
+            position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+            color: var(--text-secondary); transition: color 0.3s ease;
         }
-
-        .input-container input:focus + .icon {
-            color: var(--primary-color);
-        }
-
+        .input-container input:focus + .icon { color: var(--primary-color); }
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 0.875rem 2rem;
-            border: none;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 1.125rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            color: white; padding: 0.75rem 2rem; border: none; border-radius: 0.5rem;
+            font-weight: 600; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; overflow: hidden;
         }
-
         .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        .btn-primary:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-        }
-
-        .hidden {
-            display: none;
-        }
-
+        .btn-primary:hover::before { left: 100%; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3); }
+        .btn-primary:active { transform: translateY(0); }
+        .hidden { display: none; }
         .toast {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            left: 1.5rem;
-            max-width: calc(100% - 3rem);
-            background-color: #22c55e;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transform: translateY(-150px);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0 auto;
+            position: fixed; top: 1.5rem; right: 1.5rem; left: 1.5rem; max-width: calc(100% - 3rem);
+            background-color: #22c55e; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 1000;
+            transform: translateY(-150px); transition: transform 0.3s ease;
+            display: flex; align-items: center; gap: 0.5rem; margin: 0 auto;
         }
-
-        .toast.show {
-            transform: translateY(0);
-        }
-
-        .toast.error {
-            background-color: #ef4444;
-        }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-        }
-
-        #result-card {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        #result-card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        .toast.show { transform: translateY(0); }
+        .toast.error { background-color: #ef4444; }
+        #result-card { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        #result-card.show { opacity: 1; transform: translateY(0); }
         .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            border-radius: 50%;
-            animation: confetti-fall 3s ease-in-out forwards;
-            z-index: 1000;
-            opacity: 0;
+            position: fixed; width: 10px; height: 10px; background-color: #f00; border-radius: 50%;
+            animation: confetti-fall 3s ease-in-out forwards; z-index: 1000; opacity: 0;
         }
-
         @keyframes confetti-fall {
-            0% {
-                transform: translateY(-10vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .logo-container img {
-            max-width: 180px;
-            width: 80%;
-            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-container img:hover {
-            transform: scale(1.05);
-        }
-
+        .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; position: relative; }
+        .logo-container img { max-width: 180px; width: 80%; filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5)); transition: transform 0.3s ease; }
+        .logo-container img:hover { transform: scale(1.05); }
         .shine {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.2) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
+            position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
             animation: shine 3s infinite;
         }
-
-        @keyframes shine {
-            100% {
-                left: 100%;
-            }
-        }
-
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
+        @keyframes shine { 100% { left: 100%; } }
+        .floating { animation: floating 3s ease-in-out infinite; }
         @keyframes floating {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); }
         }
-
-        .glow {
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        .result-icon { position: relative; }
+        .result-icon::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 120%; height: 120%; background-color: rgba(34, 197, 94, 0.2); border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
-
-        .result-icon {
-            position: relative;
-            display: inline-block;
-        }
-
-        .result-icon i {
-            position: relative;
-            z-index: 1;
-        }
-
         @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.4;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
-            }
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.4; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
         }
-
-        /* 响应式设计 - 小屏幕设备 */
+        /* 响应式设计 */
         @media (max-width: 640px) {
-            h1 {
-                font-size: 2rem !important;
-            }
-            
-            .input-container input {
-                font-size: 1rem;
-                padding: 0.875rem 3rem 0.875rem 1rem;
-            }
-            
-            .btn-primary {
-                padding: 0.625rem 1.5rem;
-            }
-            
-            .logo-container img {
-                max-width: 150px;
-            }
-            
-            .card {
-                margin: 1rem;
-            }
-            
-            #result-card {
-                padding: 1.5rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem !important;
-            }
-            
-            .result-icon i {
-                width: 120px !important;
-                height: 120px !important;
-            }
+            h1 { font-size: 2rem !important; }
+            .input-container input { font-size: 1rem; padding: 0.875rem 3rem 0.875rem 1rem; }
+            .btn-primary { padding: 0.625rem 1.5rem; }
+            .logo-container img { max-width: 150px; }
+            .card { margin: 1rem; }
+            #result-card { padding: 1.5rem; }
+            h2 { font-size: 1.5rem !important; }
+            .result-icon i { width: 120px !important; height: 120px !important; }
         }
-
-        /* 响应式设计 - 超小屏幕设备 */
-        @media (max-width: 375px) {
-            h1 {
-                font-size: 1.75rem !important;
-            }
-            
-            .logo-container img {
-                max-width: 120px;
-            }
-            
-            body {
-                padding: 1rem;
-            }
-            
-            .card {
-                margin: 0.5rem;
-                padding: 1.25rem;
-            }
-            
-            .input-container {
-                margin: 1.5rem 0;
-            }
-        }
-
-        /* 响应式设计 - 大屏幕设备优化 */
-        @media (min-width: 1024px) {
-            .card {
-                max-width: 500px;
-            }
-        }
-
         /* 弹窗样式 */
         .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;
+            display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
         }
-
-        .modal.show {
-            opacity: 1;
-        }
-
-        .modal.hidden {
-            display: none;
-        }
-
+        .modal.show { opacity: 1; } .modal.hidden { display: none; }
         .modal-backdrop {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(3px);
-            animation: fadeIn 0.3s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); animation: fadeIn 0.3s ease;
         }
-
         .modal-content {
-            position: relative;
-            background-color: var(--card-background);
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 400px;
-            animation: modalSlideIn 0.3s ease-out;
-            transform-origin: center;
+            position: relative; background-color: var(--card-background); border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); width: 90%; max-width: 400px;
+            animation: modalSlideIn 0.3s ease-out; transform-origin: center;
         }
-
-        .modal-header {
-            padding: 1.5rem 2rem 0;
-            text-align: center;
-        }
-
-        .modal-logo {
-            max-width: 120px;
-            width: 50%;
-            filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.3));
-        }
-
-        .modal-body {
-            padding: 1.5rem 2rem;
-            text-align: center;
-        }
-
+        .modal-body { padding: 1.5rem 2rem; text-align: center; }
         .modal-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            margin-bottom: 1.5rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%; margin-bottom: 1.5rem;
         }
-
-        .modal-icon i {
-            width: 30px;
-            height: 30px;
-            color: white;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-
-        .modal-text {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
-
-        .modal-footer {
-            padding: 0 2rem 2rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        .modal-footer .btn-primary {
-            min-width: 120px;
-        }
-
-        /* 弹窗动画 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
+        .modal-icon i { width: 30px; height: 30px; color: white; }
+        .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 1rem; }
+        .modal-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
+        .modal-footer { padding: 0 2rem 2rem; display: flex; justify-content: center; }
+        .modal-footer .btn-primary { min-width: 120px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.9;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* 弹窗响应式设计 */
-        @media (max-width: 640px) {
-            .modal-content {
-                width: 95%;
-                margin: 1rem;
-            }
-            
-            .modal-header {
-                padding: 1.25rem 1.5rem 0;
-            }
-            
-            .modal-logo {
-                max-width: 100px;
-            }
-            
-            .modal-body {
-                padding: 1.25rem 1.5rem;
-            }
-            
-            .modal-footer {
-                padding: 0 1.5rem 1.5rem;
-            }
-            
-            .modal-icon {
-                width: 50px;
-                height: 50px;
-                margin-bottom: 1.25rem;
-            }
-            
-            .modal-icon i {
-                width: 25px;
-                height: 25px;
-            }
-            
-            .modal-title {
-                font-size: 1.25rem;
-            }
-            
-            .modal-text {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 375px) {
-            .modal-body {
-                padding: 1.25rem;
-            }
-            
-            .modal-footer {
-                padding: 0 1.25rem 1.25rem;
-            }
-            
-            .modal-text {
-                font-size: 0.9375rem;
-            }
-        }
-
         .back-button {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            position: absolute; top: 1rem; left: 1rem; background: none; border: none;
+            color: var(--text-secondary); cursor: pointer; transition: color 0.3s ease, transform 0.3s ease;
+            display: flex; align-items: center; gap: 0.5rem;
         }
-
-        .back-button:hover {
-            color: var(--text-color);
-            transform: translateX(-5px);
-        }
-
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
+        .back-button:hover { color: var(--text-color); transform: translateX(-5px); }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
         .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
+            position: absolute; background-color: white; border-radius: 50%;
             animation: twinkle 5s infinite ease-in-out;
         }
-
         @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.2;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+            0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); }
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
-    <div id="canvas-container"></div>
 
+    <!-- 全局提示 -->
     <div id="toast" class="toast"></div>
 
-    <!-- 弹窗结构 -->
+    <!-- 弹窗 -->
     <div id="info-modal" class="modal hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content">
-            <div class="modal-header">
-                <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程" class="modal-logo">
-            </div>
             <div class="modal-body">
-                <div class="modal-icon">
-                    <i data-lucide="camera" class="w-12 h-12 text-blue-500"></i>
-                </div>
-                <h3 class="modal-title text-2xl font-bold text-white">📸 温馨提示</h3>
-                <p class="modal-text text-gray-300 leading-relaxed" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
+                <div class="modal-icon"><i data-lucide="camera"></i></div>
+                <h3 class="modal-title">温馨提示</h3>
+                <p class="modal-text" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
             </div>
-            <div class="modal-footer">
-                <button id="modal-ok-btn" class="btn-primary px-8 py-3 text-lg font-semibold">确定</button>
-            </div>
+            <div class="modal-footer"><button id="modal-ok-btn" class="btn-primary">确定</button></div>
         </div>
     </div>
 
+    <!-- 主卡片 -->
     <div class="w-full max-w-md card relative overflow-hidden">
         <div class="shine"></div>
-        <button id="back-button" class="back-button hidden">
-            <i data-lucide="arrow-left"></i>
-            <span>返回</span>
-        </button>
+        <button id="back-button" class="back-button hidden"><i data-lucide="arrow-left"></i><span>返回</span></button>
         <div class="logo-container floating">
             <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程">
         </div>
-        <h1 class="text-3xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">成绩查询</h1>
-        <p class="text-center text-gray-400 mb-8 text-sm leading-relaxed">请输入学生姓名，查询审核结果</p>
+        <h1 class="text-3xl font-bold text-center mb-6">成绩查询</h1>
+        <p class="text-center text-gray-400 mb-8">请输入学生姓名，查询审核结果</p>
 
+        <!-- 查询区 -->
         <div id="search-container">
             <div class="input-container">
-                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off" class="focus:ring-2 focus:ring-blue-500">
-                <i data-lucide="search" class="icon text-gray-500"></i>
+                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off">
+                <i data-lucide="search" class="icon"></i>
             </div>
-            <button id="search-btn" class="btn-primary w-full mt-4 py-3 text-lg">查询</button>
+            <button id="search-btn" class="btn-primary w-full">查询</button>
         </div>
 
+        <!-- 结果区 -->
         <div id="result-card" class="hidden mt-8 p-8 bg-gray-800 rounded-lg relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
             <div class="text-center">
-                <div class="result-icon inline-block mb-6">
-                    <i data-lucide="check-circle" class="inline-block w-24 h-24 text-green-500 drop-shadow-lg"></i>
+                <div class="result-icon inline-block mb-6"><i data-lucide="check-circle" class="inline-block w-20 h-20 text-green-500"></i></div>
+                <h2 class="text-2xl font-bold mb-3">恭喜审核通过！</h2>
+                <h3 class="text-xl font-semibold mb-4 text-gray-300">恭喜 <span id="student-name"></span> 同学</h3>
+                <p class="text-lg text-green-400 font-semibold mb-6" id="result-message"></p>
+                <div class="inline-block px-5 py-3 bg-green-900/30 text-green-300 rounded-full text-base">
+                    <i data-lucide="award" class="inline-block w-5 h-5 mr-2"></i>审核通过
                 </div>
-                <h2 class="text-2xl font-bold mb-4 text-green-400">🎉 恭喜审核通过！</h2>
-                <h3 class="text-xl font-semibold mb-3 text-white">恭喜 <span id="student-name"></span> 同学</h3>
-                <p class="text-lg text-gray-300 mb-6 font-medium" id="result-message"></p>
-                <div class="inline-block px-6 py-3 bg-green-900/40 text-green-300 rounded-full text-base font-medium shadow-lg">
-                    <i data-lucide="award" class="inline-block w-5 h-5 mr-2"></i>
-                    审核通过
-                </div>
-                
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================
-        // 配置信息 - 必须修改！！！
-        // ============================================
-        const PUBLIC_SHEETS_API_URL = 'https://opensheet.elk.sh/1oAIRJO9vUgqLfy_sC62libWReRiHuwou_eCBdPZS27g/Sheet1'; // 替换为你的地址
-        
-        // ============================================
-        // 全局变量与DOM元素
-        // ============================================
-        let studentData = []; // 存储从表格获取的数据
+        // ==================== 核心配置 ====================
+        // 你的Google表格ID (已填写)
+        const SPREADSHEET_ID = '1oAIRJO9vUgqLfy_sC62libWReRiHuwou_eCBdPZS27g';
+        // 你的表格工作表名称，默认为 Sheet1。如果你的表格底部标签页是其他名字（如“Sheet2”或“成绩单”），请修改此处。
+        const SHEET_NAME = 'Sheet1';
+        // 公开API地址 (无需更改)
+        const PUBLIC_API_URL = `https://opensheet.elk.sh/${SPREADSHEET_ID}/${SHEET_NAME}`;
+
+        // ==================== 全局变量与DOM元素 ====================
+        let studentData = [];
         const nameInput = document.getElementById('name-input');
         const searchBtn = document.getElementById('search-btn');
         const resultCard = document.getElementById('result-card');
         const studentNameEl = document.getElementById('student-name');
         const resultMessageEl = document.getElementById('result-message');
         const searchContainer = document.getElementById('search-container');
-        const backButton = document.getElementById('back-button');
         const toast = document.getElementById('toast');
+        const backButton = document.getElementById('back-button');
         const infoModal = document.getElementById('info-modal');
         const modalOkBtn = document.getElementById('modal-ok-btn');
         const modalText = document.getElementById('modal-text');
-        const canvasContainer = document.getElementById('canvas-container');
-        
-        // 初始化图标
+
+        // ==================== 1. 初始化 ====================
         lucide.createIcons();
-        
-        // ============================================
-        // 辅助函数（弹窗、提示、动画等）
-        // ============================================
-        function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-            const icon = document.createElement('i');
-            icon.setAttribute('data-lucide', type === 'error' ? 'x-circle' : 'check-circle');
-            toast.prepend(icon);
-            lucide.createIcons();
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => { toast.innerHTML = ''; }, 300);
-            }, 3000);
-        }
 
-        function showModal() {
-            infoModal.classList.remove('hidden');
-            setTimeout(() => infoModal.classList.add('show'), 10);
-        }
-
-        function closeModal() {
-            infoModal.classList.remove('show');
-            setTimeout(() => infoModal.classList.add('hidden'), 300);
-        }
-
-        function resetSearch() {
-            nameInput.value = '';
-            resultCard.classList.remove('show');
-            backButton.classList.add('hidden');
-            gsap.to(resultCard, {
-                opacity: 0,
-                y: 20,
-                duration: 0.5,
-                onComplete: () => {
-                    resultCard.classList.add('hidden');
-                    searchContainer.classList.remove('hidden');
-                    gsap.fromTo(searchContainer, 
-                        { opacity: 0, y: -20 },
-                        { opacity: 1, y: 0, duration: 0.5 }
-                    );
-                }
-            });
-        }
-        
-        /**
-         * 从Google Sheets公开接口获取数据
-         */
+        // ==================== 2. 核心函数：从Google Sheets获取数据 ====================
         async function fetchDataFromGoogleSheets() {
-            // 显示加载状态
             const searchIcon = document.querySelector('.input-container .icon');
+            // 显示加载状态
             if (searchIcon) {
-                const originalIcon = searchIcon.getAttribute('data-lucide');
                 searchIcon.setAttribute('data-lucide', 'loader-2');
                 lucide.createIcons();
                 searchIcon.style.animation = 'spin 1s linear infinite';
             }
-            
-            // 本地备份数据
-            const backupData = [
-                { name: "梓轩", result: "科特种子班通过" },
-                { name: "陈章", result: "科特种子班通过" },
-                { name: "浩然", result: "科特种子班通过" },
-                { name: "宇辰", result: "科特种子班通过" },
-                { name: "俊熙", result: "思维赛考班通过" },
-                { name: "星睿", result: "思维赛考班通过" }
-            ];
-            
-            let isApiSuccess = false;
-            let retryCount = 0;
-            const maxRetries = 3;
-            const timeoutMs = 30000; // 30秒超时
-            
-            // 实现超时功能的辅助函数
-            const fetchWithTimeout = (url, options = {}) => {
-                return Promise.race([
-                    fetch(url, options),
-                    new Promise((_, reject) => 
-                        setTimeout(() => reject(new Error('请求超时')), timeoutMs)
-                    )
-                ]);
-            };
-            
-            while (retryCount < maxRetries && !isApiSuccess) {
-                try {
-                    retryCount++;
-                    console.log(`[数据加载日志] 尝试第 ${retryCount} 次从API获取数据...`);
-                    
-                    // 1. 发起带超时的请求到公开接口
-                    const response = await fetchWithTimeout(PUBLIC_SHEETS_API_URL);
-                    if (!response.ok) {
-                        throw new Error(`数据获取失败 (状态码: ${response.status})`);
+
+            try {
+                console.log('正在从API获取数据:', PUBLIC_API_URL);
+                const response = await fetch(PUBLIC_API_URL);
+                if (!response.ok) {
+                    // 更详细的错误提示
+                    let errorMsg = `表格读取失败 (状态码: ${response.status})。`;
+                    if(response.status === 404) {
+                        errorMsg += ' 可能原因：1) 表格ID错误；2) 工作表名称('+SHEET_NAME+')错误；3) 表格未公开分享。';
                     }
-                    
-                    // 2. 解析返回的JSON数据
-                    const rawData = await response.json();
-                    console.log('[数据加载日志] 从API获取的原始数据:', rawData);
-                    
-                    // 3. 转换数据格式 - opensheet.elk.sh返回直接的JSON数组
-                    const parsedData = rawData
-                        .map(row => {
-                            // 处理不同可能的列名格式
-                            const name = row["姓名"] || row["name"] || row["Name"] || '';
-                            const result = row["审核结果"] || row["result"] || row["Result"] || '';
-                            return {
-                                name: String(name).trim(),
-                                result: String(result).trim()
-                            };
-                        })
-                        .filter(item => item.name && item.result); // 过滤无效数据
-                    
-                    // 4. 验证解析结果
-                    console.log('[数据解析日志] 原始数据行数:', rawData.length, '解析后有效数据行数:', parsedData.length);
-                    
-                    if (parsedData.length === 0) {
-                        throw new Error('解析后的数据为空');
-                    }
-                    
-                    // 4. 数据加载成功
-                    studentData = parsedData;
-                    isApiSuccess = true;
-                    
-                    console.log(`[数据加载日志] API数据加载成功，共 ${studentData.length} 条记录，重试次数: ${retryCount-1}`);
-                    showToast('名单数据已更新', 'success');
-                    break;
-                    
-                } catch (error) {
-                    console.error(`[数据加载日志] 第 ${retryCount} 次API请求失败:`, error.message);
-                    
-                    if (retryCount >= maxRetries) {
-                        // 所有重试都失败
-                        console.error(`[数据加载日志] API请求全部失败，切换到本地备份数据`);
-                        studentData = backupData;
-                        showToast('使用本地备份数据', 'success');
-                        break;
-                    }
-                    
-                    // 等待一段时间后重试
-                    const waitTime = Math.pow(2, retryCount) * 1000; // 指数退避策略
-                    console.log(`[数据加载日志] 将在 ${waitTime}ms 后重试...`);
-                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    throw new Error(errorMsg);
                 }
-            }
-            
-            // 记录最终数据来源
-            console.log(`[数据加载日志] 数据加载完成，来源: ${isApiSuccess ? 'API' : '本地备份'}，数据条数: ${studentData.length}`);
-            
-            // 恢复搜索图标
-            if (searchIcon) {
-                searchIcon.setAttribute('data-lucide', 'search');
-                searchIcon.style.animation = '';
-                lucide.createIcons();
+                const rawData = await response.json();
+                console.log('API返回的原始数据:', rawData);
+
+                // 关键：转换数据格式
+                // 假设你的表格表头行（第一行）两个单元格分别是“姓名”和“审核结果”
+                // 如果表头文字不同，请修改下面对象中的属性名，例如 row["学生"] row["结果"]
+                studentData = rawData.map(row => ({
+                    name: (row["姓名"] || row["name"] || row["学生"] || '').toString().trim(), // 适配不同列名
+                    result: (row["审核结果"] || row["result"] || row["结果"] || '').toString().trim()
+                })).filter(student => student.name); // 过滤掉姓名为空的行
+
+                console.log(`数据转换成功，共 ${studentData.length} 条记录:`, studentData);
+                showToast('名单数据已同步最新', 'success');
+
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                showToast(`数据加载失败: ${error.message}`, 'error');
+                // 可选：启用后备数据，防止网站完全无法使用
+                // studentData = [ {name: "示例", result: "请检查表格配置"} ];
+            } finally {
+                // 恢复图标
+                if (searchIcon) {
+                    searchIcon.setAttribute('data-lucide', 'search');
+                    searchIcon.style.animation = '';
+                    lucide.createIcons();
+                }
             }
         }
 
-        // ============================================
-        // 核心函数：查询学生
-        // ============================================
+        // ==================== 3. 核心函数：查询学生 ====================
         function searchStudent() {
             const name = nameInput.value.trim();
             if (!name) {
@@ -876,7 +299,6 @@
                 return;
             }
 
-            // 在实时数据中查找
             const student = studentData.find(s => s.name === name);
 
             if (student) {
@@ -887,53 +309,97 @@
                 // 动画显示结果
                 resultCard.classList.remove('show');
                 gsap.to(searchContainer, {
-                    opacity: 0,
-                    y: -20,
-                    duration: 0.5,
+                    opacity: 0, y: -20, duration: 0.5,
                     onComplete: () => {
                         searchContainer.classList.add('hidden');
                         resultCard.classList.remove('hidden');
                         backButton.classList.remove('hidden');
                         setTimeout(() => {
                             gsap.to(resultCard, {
-                                opacity: 1,
-                                y: 0,
-                                duration: 0.5,
+                                opacity: 1, y: 0, duration: 0.5,
                                 onComplete: () => {
                                     resultCard.classList.add('show');
+                                    createConfetti();
+                                    // 显示成功弹窗
+                                    modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
+                                    setTimeout(() => showModal(), 800);
                                 }
                             });
-
-                            // 显示提示弹窗
-                            setTimeout(() => {
-                                modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
-                                showModal();
-                            }, 1000);
                         }, 100);
                     }
                 });
             } else {
-                // 未找到学生
-                gsap.fromTo(nameInput, { x: 0 }, {
-                    x: 10, duration: 0.1, repeat: 5, yoyo: true,
-                    onComplete: () => {
-                        gsap.set(nameInput, { x: 0 });
-                        modalText.textContent = '未找到该学生信息';
-                        showModal();
-                    }
-                });
+                // 未找到
+                modalText.textContent = `未找到姓名为 “${name}” 的学生，请核对姓名或联系老师。`;
+                showModal();
+                // 输入框震动提示
+                gsap.fromTo(nameInput, { x: 0 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true, onComplete: () => gsap.set(nameInput, { x: 0 }) });
             }
         }
 
-        // ============================================
-        // 5. 页面初始化
-        // ============================================
+        // ==================== 4. 辅助函数 ====================
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+            const icon = document.createElement('i');
+            icon.setAttribute('data-lucide, type === 'error' ? 'x-circle' : 'check-circle');
+            toast.prepend(icon);
+            lucide.createIcons();
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => { toast.innerHTML = ''; }, 300);
+            }, 3000);
+        }
+        function showModal() { infoModal.classList.remove('hidden'); setTimeout(() => infoModal.classList.add('show'), 10); }
+        function closeModal() { infoModal.classList.remove('show'); setTimeout(() => infoModal.classList.add('hidden'), 300); }
+        function resetSearch() {
+            nameInput.value = '';
+            resultCard.classList.remove('show');
+            backButton.classList.add('hidden');
+            gsap.to(resultCard, {
+                opacity: 0, y: 20, duration: 0.5,
+                onComplete: () => {
+                    resultCard.classList.add('hidden');
+                    searchContainer.classList.remove('hidden');
+                    gsap.fromTo(searchContainer, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
+                }
+            });
+        }
+        function createConfetti() {
+            const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = confetti.style.width;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // ==================== 5. 页面初始化与事件绑定 ====================
         document.addEventListener('DOMContentLoaded', async function() {
-            // 页面加载动画
-            gsap.fromTo('.card', 
-                { opacity: 0, y: 50 },
-                { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' }
-            );
+            createStars();
+            // 入场动画
+            gsap.fromTo('.card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' });
             gsap.fromTo('h1', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.3 });
             gsap.fromTo('p', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.5 });
 
@@ -947,22 +413,28 @@
             modalOkBtn.addEventListener('click', closeModal);
             infoModal.addEventListener('click', (e) => { if (e.target.classList.contains('modal-backdrop')) closeModal(); });
 
-            // 输入框动态效果
+            // 输入框清空功能
             nameInput.addEventListener('input', function() {
                 const icon = document.querySelector('.input-container .icon');
                 if (this.value) {
                     icon.setAttribute('data-lucide', 'x');
-                    icon.onclick = () => {
-                        this.value = '';
-                        icon.setAttribute('data-lucide', 'search');
-                        lucide.createIcons();
-                    };
+                    lucide.createIcons();
+                    icon.onclick = () => { nameInput.value = ''; icon.setAttribute('data-lucide', 'search'); lucide.createIcons(); };
                 } else {
                     icon.setAttribute('data-lucide', 'search');
+                    lucide.createIcons();
                     icon.onclick = null;
                 }
-                lucide.createIcons();
             });
+
+            console.log('网站初始化完成。数据接口:', PUBLIC_API_URL);
+        });
+
+        // 鼠标视差效果
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+            gsap.to('.card', { x: mouseX * 10, y: mouseY * 10, duration: 0.5 });
         });
     </script>
 </body>
