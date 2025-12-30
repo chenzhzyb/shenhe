@@ -16,6 +16,7 @@
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
             --accent-color: #06b6d4;
+            --success-color: #22c55e;
             --background-color: #0f172a;
             --card-background: #1e293b;
             --text-color: #f8fafc;
@@ -104,14 +105,16 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 0.75rem 2rem;
+            padding: 0.875rem 2rem;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             font-weight: 600;
+            font-size: 1.125rem;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary::before {
@@ -121,7 +124,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s ease;
         }
 
@@ -130,12 +133,17 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
         }
 
         .hidden {
@@ -272,19 +280,12 @@
 
         .result-icon {
             position: relative;
+            display: inline-block;
         }
 
-        .result-icon::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120%;
-            height: 120%;
-            background-color: rgba(34, 197, 94, 0.2);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+        .result-icon i {
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes pulse {
@@ -302,30 +303,75 @@
             }
         }
 
-        /* 响应式设计 */
+        /* 响应式设计 - 小屏幕设备 */
         @media (max-width: 640px) {
-            h1 { font-size: 2rem !important; }
-            .input-container input { font-size: 1rem; padding: 0.875rem 3rem 0.875rem 1rem; }
-            .btn-primary { padding: 0.625rem 1.5rem; }
-            .logo-container img { max-width: 150px; }
-            .card { margin: 1rem; }
-            #result-card { padding: 1.5rem; }
-            h2 { font-size: 1.5rem !important; }
-            .result-icon i { width: 120px !important; height: 120px !important; }
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            .input-container input {
+                font-size: 1rem;
+                padding: 0.875rem 3rem 0.875rem 1rem;
+            }
+            
+            .btn-primary {
+                padding: 0.625rem 1.5rem;
+            }
+            
+            .logo-container img {
+                max-width: 150px;
+            }
+            
+            .card {
+                margin: 1rem;
+            }
+            
+            #result-card {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .result-icon i {
+                width: 120px !important;
+                height: 120px !important;
+            }
         }
 
+        /* 响应式设计 - 超小屏幕设备 */
         @media (max-width: 375px) {
-            h1 { font-size: 1.75rem !important; }
-            .logo-container img { max-width: 120px; }
-            body { padding: 1rem; }
-            .card { margin: 0.5rem; padding: 1.25rem; }
-            .input-container { margin: 1.5rem 0; }
+            h1 {
+                font-size: 1.75rem !important;
+            }
+            
+            .logo-container img {
+                max-width: 120px;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+            
+            .card {
+                margin: 0.5rem;
+                padding: 1.25rem;
+            }
+            
+            .input-container {
+                margin: 1.5rem 0;
+            }
         }
 
+        /* 响应式设计 - 大屏幕设备优化 */
         @media (min-width: 1024px) {
-            .card { max-width: 500px; }
+            .card {
+                max-width: 500px;
+            }
         }
 
+        /* 弹窗样式 */
         .modal {
             position: fixed;
             top: 0;
@@ -340,8 +386,13 @@
             transition: opacity 0.3s ease;
         }
 
-        .modal.show { opacity: 1; }
-        .modal.hidden { display: none; }
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
 
         .modal-backdrop {
             position: absolute;
@@ -365,9 +416,22 @@
             transform-origin: center;
         }
 
-        .modal-header { padding: 1.5rem 2rem 0; text-align: center; }
-        .modal-logo { max-width: 120px; width: 50%; filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.3)); }
-        .modal-body { padding: 1.5rem 2rem; text-align: center; }
+        .modal-header {
+            padding: 1.5rem 2rem 0;
+            text-align: center;
+        }
+
+        .modal-logo {
+            max-width: 120px;
+            width: 50%;
+            filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.3));
+        }
+
+        .modal-body {
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+
         .modal-icon {
             display: inline-flex;
             align-items: center;
@@ -378,28 +442,133 @@
             border-radius: 50%;
             margin-bottom: 1.5rem;
         }
-        .modal-icon i { width: 30px; height: 30px; color: white; }
-        .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 1rem; }
-        .modal-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
-        .modal-footer { padding: 0 2rem 2rem; display: flex; justify-content: center; }
-        .modal-footer .btn-primary { min-width: 120px; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+        .modal-icon i {
+            width: 30px;
+            height: 30px;
+            color: white;
         }
 
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .modal-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .modal-footer {
+            padding: 0 2rem 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .modal-footer .btn-primary {
+            min-width: 120px;
+        }
+
+        /* 弹窗动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 弹窗响应式设计 */
         @media (max-width: 640px) {
-            .modal-content { width: 95%; margin: 1rem; }
-            .modal-header { padding: 1.25rem 1.5rem 0; }
-            .modal-logo { max-width: 100px; }
-            .modal-body { padding: 1.25rem 1.5rem; }
-            .modal-footer { padding: 0 1.5rem 1.5rem; }
-            .modal-icon { width: 50px; height: 50px; margin-bottom: 1.25rem; }
-            .modal-icon i { width: 25px; height: 25px; }
-            .modal-title { font-size: 1.25rem; }
-            .modal-text { font-size: 1rem; }
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+            
+            .modal-header {
+                padding: 1.25rem 1.5rem 0;
+            }
+            
+            .modal-logo {
+                max-width: 100px;
+            }
+            
+            .modal-body {
+                padding: 1.25rem 1.5rem;
+            }
+            
+            .modal-footer {
+                padding: 0 1.5rem 1.5rem;
+            }
+            
+            .modal-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 1.25rem;
+            }
+            
+            .modal-icon i {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .modal-title {
+                font-size: 1.25rem;
+            }
+            
+            .modal-text {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .modal-body {
+                padding: 1.25rem;
+            }
+            
+            .modal-footer {
+                padding: 0 1.25rem 1.25rem;
+            }
+            
+            .modal-text {
+                font-size: 0.9375rem;
+            }
         }
 
         .back-button {
@@ -439,8 +608,14 @@
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
     </style>
 </head>
@@ -459,13 +634,13 @@
             </div>
             <div class="modal-body">
                 <div class="modal-icon">
-                    <i data-lucide="camera"></i>
+                    <i data-lucide="camera" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <h3 class="modal-title">温馨提示</h3>
-                <p class="modal-text" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
+                <h3 class="modal-title text-2xl font-bold text-white">📸 温馨提示</h3>
+                <p class="modal-text text-gray-300 leading-relaxed" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
             </div>
             <div class="modal-footer">
-                <button id="modal-ok-btn" class="btn-primary">确定</button>
+                <button id="modal-ok-btn" class="btn-primary px-8 py-3 text-lg font-semibold">确定</button>
             </div>
         </div>
     </div>
@@ -479,41 +654,41 @@
         <div class="logo-container floating">
             <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程">
         </div>
-        <h1 class="text-3xl font-bold text-center mb-6">成绩查询</h1>
-        <p class="text-center text-gray-400 mb-8">请输入学生姓名，查询审核结果</p>
+        <h1 class="text-3xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">成绩查询</h1>
+        <p class="text-center text-gray-400 mb-8 text-sm leading-relaxed">请输入学生姓名，查询审核结果</p>
 
         <div id="search-container">
             <div class="input-container">
-                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off">
-                <i data-lucide="search" class="icon"></i>
+                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off" class="focus:ring-2 focus:ring-blue-500">
+                <i data-lucide="search" class="icon text-gray-500"></i>
             </div>
-            <button id="search-btn" class="btn-primary w-full">查询</button>
+            <button id="search-btn" class="btn-primary w-full mt-4 py-3 text-lg">查询</button>
         </div>
 
         <div id="result-card" class="hidden mt-8 p-8 bg-gray-800 rounded-lg relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
             <div class="text-center">
                 <div class="result-icon inline-block mb-6">
-                    <i data-lucide="check-circle" class="inline-block w-20 h-20 text-green-500"></i>
+                    <i data-lucide="check-circle" class="inline-block w-24 h-24 text-green-500 drop-shadow-lg"></i>
                 </div>
-                <h2 class="text-2xl font-bold mb-3">恭喜审核通过！</h2>
-                <h3 class="text-xl font-semibold mb-4 text-gray-300">恭喜 <span id="student-name"></span> 同学</h3>
-                <p class="text-lg text-green-400 font-semibold mb-6" id="result-message"></p>
-                <div class="inline-block px-5 py-3 bg-green-900/30 text-green-300 rounded-full text-base">
+                <h2 class="text-2xl font-bold mb-4 text-green-400">🎉 恭喜审核通过！</h2>
+                <h3 class="text-xl font-semibold mb-3 text-white">恭喜 <span id="student-name"></span> 同学</h3>
+                <p class="text-lg text-gray-300 mb-6 font-medium" id="result-message"></p>
+                <div class="inline-block px-6 py-3 bg-green-900/40 text-green-300 rounded-full text-base font-medium shadow-lg">
                     <i data-lucide="award" class="inline-block w-5 h-5 mr-2"></i>
                     审核通过
                 </div>
+                
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // 核心配置（你只需要确保表格ID正确，其他通常无需修改）
+        // 配置信息 - 必须修改！！！
         // ============================================
-        const KINGSOFT_SHEET_ID = 'cm6HRAQaUE5Z'; // 你的金山文档表格ID
-        const DATA_RANGE = 'A:B'; // 读取A列和B列的所有行
-
+        const PUBLIC_SHEETS_API_URL = 'https://opensheet.elk.sh/1oAIRJO9vUgqLfy_sC62libWReRiHuwou_eCBdPZS27g/Sheet1'; // 替换为你的地址
+        
         // ============================================
         // 全局变量与DOM元素
         // ============================================
@@ -524,151 +699,18 @@
         const studentNameEl = document.getElementById('student-name');
         const resultMessageEl = document.getElementById('result-message');
         const searchContainer = document.getElementById('search-container');
-        const toast = document.getElementById('toast');
         const backButton = document.getElementById('back-button');
-        const canvasContainer = document.getElementById('canvas-container');
+        const toast = document.getElementById('toast');
         const infoModal = document.getElementById('info-modal');
         const modalOkBtn = document.getElementById('modal-ok-btn');
         const modalText = document.getElementById('modal-text');
-
-        // ============================================
-        // 1. 初始化图标和基础UI
-        // ============================================
+        const canvasContainer = document.getElementById('canvas-container');
+        
+        // 初始化图标
         lucide.createIcons();
-
+        
         // ============================================
-        // 2. 核心函数：从金山文档表格获取实时数据
-        // ============================================
-        async function fetchDataFromKingsoftSheet() {
-            // 本地备份数据，当API请求失败时使用
-            const backupData = [
-                { name: "梓轩", result: "科特种子班通过" },
-                { name: "陈章", result: "科特种子班通过" },
-                { name: "浩然", result: "科特种子班通过" },
-                { name: "宇辰", result: "科特种子班通过" },
-                { name: "俊熙", result: "思维赛考班通过" },
-                { name: "星睿", result: "思维赛考班通过" }
-            ];
-            
-            // 显示加载状态
-            const searchIcon = document.querySelector('.input-container .icon');
-            if (searchIcon) {
-                const originalIcon = searchIcon.getAttribute('data-lucide');
-                searchIcon.setAttribute('data-lucide', 'loader-2');
-                lucide.createIcons();
-                searchIcon.style.animation = 'spin 1s linear infinite';
-            }
-
-            try {
-                // 构建金山文档公开API请求地址
-                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
-                const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    throw new Error(`表格读取失败 (状态码: ${response.status})`);
-                }
-
-                const jsonData = await response.json();
-
-                // 调试：在控制台查看原始数据结构
-                console.log('API原始数据:', jsonData);
-
-                // 解析数据：假设API返回格式为 { cells: [ [姓名, 结果], ... ] }
-                const rows = jsonData.cells || [];
-                if (rows.length < 2) {
-                    console.warn('表格数据为空或仅包含表头，使用备份数据');
-                    studentData = backupData;
-                    showToast('使用本地备份数据', 'success');
-                    return;
-                }
-
-                // 转换为前端需要的格式
-                // 跳过可能存在的空行或表头（如果第一行是数据，去掉 .slice(1) 即可）
-                studentData = rows
-                    .slice(1) // 跳过第一行表头
-                    .filter(row => row && row.length >= 2 && row[0]) // 过滤有效行
-                    .map(row => ({
-                        name: String(row[0]).trim(),
-                        result: String(row[1] || '').trim()
-                    }));
-
-                console.log(`成功加载 ${studentData.length} 条学生数据。`);
-                showToast('数据已同步最新名单', 'success');
-
-            } catch (error) {
-                console.error('从表格加载数据失败:', error);
-                // 使用本地备份数据确保系统正常工作
-                studentData = backupData;
-                showToast('使用本地备份数据', 'success');
-            } finally {
-                // 恢复搜索图标
-                if (searchIcon) {
-                    searchIcon.setAttribute('data-lucide', 'search');
-                    searchIcon.style.animation = '';
-                    lucide.createIcons();
-                }
-            }
-        }
-
-        // ============================================
-        // 3. 核心函数：查询学生
-        // ============================================
-        function searchStudent() {
-            const name = nameInput.value.trim();
-            if (!name) {
-                modalText.textContent = '请输入学生姓名';
-                showModal();
-                return;
-            }
-
-            // 在实时数据中查找
-            const student = studentData.find(s => s.name === name);
-
-            if (student) {
-                // 找到学生
-                studentNameEl.textContent = student.name;
-                resultMessageEl.textContent = student.result;
-
-                // 动画显示结果
-                resultCard.classList.remove('show');
-                gsap.to(searchContainer, {
-                    opacity: 0,
-                    y: -20,
-                    duration: 0.5,
-                    onComplete: () => {
-                        searchContainer.classList.add('hidden');
-                        resultCard.classList.remove('hidden');
-                        backButton.classList.remove('hidden');
-                        setTimeout(() => {
-                            gsap.to(resultCard, {
-                                opacity: 1,
-                                y: 0,
-                                duration: 0.5,
-                                onComplete: () => {
-                                    resultCard.classList.add('show');
-                                    createConfetti();
-                                    // 显示成功弹窗
-                                    modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
-                                    setTimeout(() => showModal(), 800);
-                                }
-                            });
-                        }, 100);
-                    }
-                });
-            } else {
-                // 未找到学生
-                modalText.textContent = `未找到姓名为 “${name}” 的学生，请核对姓名或联系老师。`;
-                showModal();
-                // 输入框震动提示
-                gsap.fromTo(nameInput,
-                    { x: 0 },
-                    { x: 10, duration: 0.1, repeat: 5, yoyo: true, onComplete: () => gsap.set(nameInput, { x: 0 }) }
-                );
-            }
-        }
-
-        // ============================================
-        // 4. 辅助函数（弹窗、提示、动画等）
+        // 辅助函数（弹窗、提示、动画等）
         // ============================================
         function showToast(message, type = 'success') {
             toast.textContent = message;
@@ -705,56 +747,140 @@
                 onComplete: () => {
                     resultCard.classList.add('hidden');
                     searchContainer.classList.remove('hidden');
-                    gsap.fromTo(searchContainer,
+                    gsap.fromTo(searchContainer, 
                         { opacity: 0, y: -20 },
                         { opacity: 1, y: 0, duration: 0.5 }
                     );
                 }
             });
         }
-
-        function createConfetti() {
-            const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
-            for (let i = 0; i < 150; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = `${Math.random() * 100}vw`;
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = `${Math.random() * 2}s`;
-                confetti.style.width = `${Math.random() * 10 + 5}px`;
-                confetti.style.height = confetti.style.width;
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 5000);
+        
+        /**
+         * 从Google Sheets公开接口获取数据
+         */
+        async function fetchDataFromGoogleSheets() {
+            // 显示加载状态
+            const searchIcon = document.querySelector('.input-container .icon');
+            if (searchIcon) {
+                const originalIcon = searchIcon.getAttribute('data-lucide');
+                searchIcon.setAttribute('data-lucide', 'loader-2');
+                lucide.createIcons();
+                searchIcon.style.animation = 'spin 1s linear infinite';
             }
-        }
+            
+            try {
+                // 1. 发起请求到公开接口
+                const response = await fetch(PUBLIC_SHEETS_API_URL);
+                if (!response.ok) {
+                    throw new Error(`数据获取失败 (状态码: ${response.status})。请检查表格ID、分享权限和网络。`);
+                }
+                
+                // 2. 解析返回的JSON数据
+                // 接口返回格式即为数组： [ {姓名列名: "张三", 结果列名: "通过"}, ... ]
+                const rawData = await response.json();
+                console.log('从接口获取的原始数据:', rawData);
 
-        // 星空背景（保留原有效果）
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                const size = Math.random() * 3 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                starsContainer.appendChild(star);
+                // 3. 转换数据格式（适配你网站的查询逻辑）
+                // 假设你的表格列名是"姓名"和"审核结果"
+                studentData = rawData.map(row => ({
+                    name: row["姓名"]?.trim() || '',   // 根据你的实际列名修改 "姓名"
+                    result: row["审核结果"]?.trim() || '' // 根据你的实际列名修改 "审核结果"
+                }));
+
+                console.log(`成功加载 ${studentData.length} 条学生数据。`);
+                // 显示成功提示
+                showToast('名单数据已更新', 'success');
+
+            } catch (error) {
+                console.error('从表格加载数据失败:', error);
+                // 调用错误提示
+                showToast(`数据加载失败: ${error.message}`, 'error');
+                // 使用本地备份数据，防止网站完全无法使用
+                studentData = [
+                    { name: "梓轩", result: "科特种子班通过" },
+                    { name: "陈章", result: "科特种子班通过" },
+                    { name: "浩然", result: "科特种子班通过" },
+                    { name: "宇辰", result: "科特种子班通过" },
+                    { name: "俊熙", result: "思维赛考班通过" },
+                    { name: "星睿", result: "思维赛考班通过" }
+                ];
+                showToast('使用本地备份数据', 'success');
+            } finally {
+                // 恢复搜索图标
+                if (searchIcon) {
+                    searchIcon.setAttribute('data-lucide', 'search');
+                    searchIcon.style.animation = '';
+                    lucide.createIcons();
+                }
             }
         }
 
         // ============================================
-        // 5. 页面加载初始化与事件绑定
+        // 核心函数：查询学生
+        // ============================================
+        function searchStudent() {
+            const name = nameInput.value.trim();
+            if (!name) {
+                modalText.textContent = '请输入学生姓名';
+                showModal();
+                return;
+            }
+
+            // 在实时数据中查找
+            const student = studentData.find(s => s.name === name);
+
+            if (student) {
+                // 找到学生
+                studentNameEl.textContent = student.name;
+                resultMessageEl.textContent = student.result;
+
+                // 动画显示结果
+                resultCard.classList.remove('show');
+                gsap.to(searchContainer, {
+                    opacity: 0,
+                    y: -20,
+                    duration: 0.5,
+                    onComplete: () => {
+                        searchContainer.classList.add('hidden');
+                        resultCard.classList.remove('hidden');
+                        backButton.classList.remove('hidden');
+                        setTimeout(() => {
+                            gsap.to(resultCard, {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.5,
+                                onComplete: () => {
+                                    resultCard.classList.add('show');
+                                }
+                            });
+
+                            // 显示提示弹窗
+                            setTimeout(() => {
+                                modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
+                                showModal();
+                            }, 1000);
+                        }, 100);
+                    }
+                });
+            } else {
+                // 未找到学生
+                gsap.fromTo(nameInput, { x: 0 }, {
+                    x: 10, duration: 0.1, repeat: 5, yoyo: true,
+                    onComplete: () => {
+                        gsap.set(nameInput, { x: 0 });
+                        modalText.textContent = '未找到该学生信息';
+                        showModal();
+                    }
+                });
+            }
+        }
+
+        // ============================================
+        // 5. 页面初始化
         // ============================================
         document.addEventListener('DOMContentLoaded', async function() {
-            // 初始化视觉效果
-            createStars();
-            // 初始化Three.js背景（可根据需要保留或移除）
-            // initThreeScene();
-
-            // 页面入场动画
-            gsap.fromTo('.card',
+            // 页面加载动画
+            gsap.fromTo('.card', 
                 { opacity: 0, y: 50 },
                 { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' }
             );
@@ -762,7 +888,7 @@
             gsap.fromTo('p', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.5 });
 
             // 首次加载数据
-            await fetchDataFromKingsoftSheet();
+            await fetchDataFromGoogleSheets();
 
             // 绑定事件
             searchBtn.addEventListener('click', searchStudent);
@@ -776,24 +902,17 @@
                 const icon = document.querySelector('.input-container .icon');
                 if (this.value) {
                     icon.setAttribute('data-lucide', 'x');
-                    lucide.createIcons();
-                    // 点击X清空输入框
-                    icon.onclick = () => { nameInput.value = ''; icon.setAttribute('data-lucide', 'search'); lucide.createIcons(); };
+                    icon.onclick = () => {
+                        this.value = '';
+                        icon.setAttribute('data-lucide', 'search');
+                        lucide.createIcons();
+                    };
                 } else {
                     icon.setAttribute('data-lucide', 'search');
-                    lucide.createIcons();
                     icon.onclick = null;
                 }
+                lucide.createIcons();
             });
-
-            console.log('网站初始化完成，已连接至实时数据。');
-        });
-
-        // 可选：鼠标视差效果
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth - 0.5;
-            const mouseY = e.clientY / window.innerHeight - 0.5;
-            gsap.to('.card', { x: mouseX * 10, y: mouseY * 10, duration: 0.5 });
         });
     </script>
 </body>
