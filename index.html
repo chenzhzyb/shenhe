@@ -540,6 +540,16 @@
         // 2. 核心函数：从金山文档表格获取实时数据
         // ============================================
         async function fetchDataFromKingsoftSheet() {
+            // 本地备份数据，当API请求失败时使用
+            const backupData = [
+                { name: "梓轩", result: "科特种子班通过" },
+                { name: "陈章", result: "科特种子班通过" },
+                { name: "浩然", result: "科特种子班通过" },
+                { name: "宇辰", result: "科特种子班通过" },
+                { name: "俊熙", result: "思维赛考班通过" },
+                { name: "星睿", result: "思维赛考班通过" }
+            ];
+            
             // 显示加载状态
             const searchIcon = document.querySelector('.input-container .icon');
             if (searchIcon) {
@@ -551,11 +561,11 @@
 
             try {
                 // 构建金山文档公开API请求地址
-                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${KINGSOFT_SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
+                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
                 const response = await fetch(apiUrl);
 
                 if (!response.ok) {
-                    throw new Error(`表格读取失败 (状态码: ${response.status})。请检查表格ID和分享权限。`);
+                    throw new Error(`表格读取失败 (状态码: ${response.status})`);
                 }
 
                 const jsonData = await response.json();
@@ -565,15 +575,17 @@
 
                 // 解析数据：假设API返回格式为 { cells: [ [姓名, 结果], ... ] }
                 const rows = jsonData.cells || [];
-                if (rows.length === 0) {
-                    console.warn('表格数据为空');
-                    studentData = [];
+                if (rows.length < 2) {
+                    console.warn('表格数据为空或仅包含表头，使用备份数据');
+                    studentData = backupData;
+                    showToast('使用本地备份数据', 'success');
                     return;
                 }
 
                 // 转换为前端需要的格式
                 // 跳过可能存在的空行或表头（如果第一行是数据，去掉 .slice(1) 即可）
                 studentData = rows
+                    .slice(1) // 跳过第一行表头
                     .filter(row => row && row.length >= 2 && row[0]) // 过滤有效行
                     .map(row => ({
                         name: String(row[0]).trim(),
@@ -585,9 +597,9 @@
 
             } catch (error) {
                 console.error('从表格加载数据失败:', error);
-                showToast(`数据加载失败: ${error.message}`, 'error');
-                // 可选：使用一个本地备份数据，防止网站完全无法使用
-                // studentData = [...];
+                // 使用本地备份数据确保系统正常工作
+                studentData = backupData;
+                showToast('使用本地备份数据', 'success');
             } finally {
                 // 恢复搜索图标
                 if (searchIcon) {
