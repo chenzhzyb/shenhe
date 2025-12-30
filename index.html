@@ -16,7 +16,6 @@
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
             --accent-color: #06b6d4;
-            --success-color: #22c55e;
             --background-color: #0f172a;
             --card-background: #1e293b;
             --text-color: #f8fafc;
@@ -105,16 +104,14 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 0.875rem 2rem;
+            padding: 0.75rem 2rem;
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             font-weight: 600;
-            font-size: 1.125rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary::before {
@@ -124,7 +121,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
@@ -133,17 +130,12 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        .btn-primary:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            transform: translateY(0);
         }
 
         .hidden {
@@ -280,12 +272,19 @@
 
         .result-icon {
             position: relative;
-            display: inline-block;
         }
 
-        .result-icon i {
-            position: relative;
-            z-index: 1;
+        .result-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background-color: rgba(34, 197, 94, 0.2);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
@@ -303,75 +302,30 @@
             }
         }
 
-        /* 响应式设计 - 小屏幕设备 */
+        /* 响应式设计 */
         @media (max-width: 640px) {
-            h1 {
-                font-size: 2rem !important;
-            }
-            
-            .input-container input {
-                font-size: 1rem;
-                padding: 0.875rem 3rem 0.875rem 1rem;
-            }
-            
-            .btn-primary {
-                padding: 0.625rem 1.5rem;
-            }
-            
-            .logo-container img {
-                max-width: 150px;
-            }
-            
-            .card {
-                margin: 1rem;
-            }
-            
-            #result-card {
-                padding: 1.5rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem !important;
-            }
-            
-            .result-icon i {
-                width: 120px !important;
-                height: 120px !important;
-            }
+            h1 { font-size: 2rem !important; }
+            .input-container input { font-size: 1rem; padding: 0.875rem 3rem 0.875rem 1rem; }
+            .btn-primary { padding: 0.625rem 1.5rem; }
+            .logo-container img { max-width: 150px; }
+            .card { margin: 1rem; }
+            #result-card { padding: 1.5rem; }
+            h2 { font-size: 1.5rem !important; }
+            .result-icon i { width: 120px !important; height: 120px !important; }
         }
 
-        /* 响应式设计 - 超小屏幕设备 */
         @media (max-width: 375px) {
-            h1 {
-                font-size: 1.75rem !important;
-            }
-            
-            .logo-container img {
-                max-width: 120px;
-            }
-            
-            body {
-                padding: 1rem;
-            }
-            
-            .card {
-                margin: 0.5rem;
-                padding: 1.25rem;
-            }
-            
-            .input-container {
-                margin: 1.5rem 0;
-            }
+            h1 { font-size: 1.75rem !important; }
+            .logo-container img { max-width: 120px; }
+            body { padding: 1rem; }
+            .card { margin: 0.5rem; padding: 1.25rem; }
+            .input-container { margin: 1.5rem 0; }
         }
 
-        /* 响应式设计 - 大屏幕设备优化 */
         @media (min-width: 1024px) {
-            .card {
-                max-width: 500px;
-            }
+            .card { max-width: 500px; }
         }
 
-        /* 弹窗样式 */
         .modal {
             position: fixed;
             top: 0;
@@ -386,13 +340,8 @@
             transition: opacity 0.3s ease;
         }
 
-        .modal.show {
-            opacity: 1;
-        }
-
-        .modal.hidden {
-            display: none;
-        }
+        .modal.show { opacity: 1; }
+        .modal.hidden { display: none; }
 
         .modal-backdrop {
             position: absolute;
@@ -416,22 +365,9 @@
             transform-origin: center;
         }
 
-        .modal-header {
-            padding: 1.5rem 2rem 0;
-            text-align: center;
-        }
-
-        .modal-logo {
-            max-width: 120px;
-            width: 50%;
-            filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.3));
-        }
-
-        .modal-body {
-            padding: 1.5rem 2rem;
-            text-align: center;
-        }
-
+        .modal-header { padding: 1.5rem 2rem 0; text-align: center; }
+        .modal-logo { max-width: 120px; width: 50%; filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.3)); }
+        .modal-body { padding: 1.5rem 2rem; text-align: center; }
         .modal-icon {
             display: inline-flex;
             align-items: center;
@@ -442,133 +378,28 @@
             border-radius: 50%;
             margin-bottom: 1.5rem;
         }
+        .modal-icon i { width: 30px; height: 30px; color: white; }
+        .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 1rem; }
+        .modal-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
+        .modal-footer { padding: 0 2rem 2rem; display: flex; justify-content: center; }
+        .modal-footer .btn-primary { min-width: 120px; }
 
-        .modal-icon i {
-            width: 30px;
-            height: 30px;
-            color: white;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-
-        .modal-text {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
-
-        .modal-footer {
-            padding: 0 2rem 2rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        .modal-footer .btn-primary {
-            min-width: 120px;
-        }
-
-        /* 弹窗动画 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.9;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* 弹窗响应式设计 */
         @media (max-width: 640px) {
-            .modal-content {
-                width: 95%;
-                margin: 1rem;
-            }
-            
-            .modal-header {
-                padding: 1.25rem 1.5rem 0;
-            }
-            
-            .modal-logo {
-                max-width: 100px;
-            }
-            
-            .modal-body {
-                padding: 1.25rem 1.5rem;
-            }
-            
-            .modal-footer {
-                padding: 0 1.5rem 1.5rem;
-            }
-            
-            .modal-icon {
-                width: 50px;
-                height: 50px;
-                margin-bottom: 1.25rem;
-            }
-            
-            .modal-icon i {
-                width: 25px;
-                height: 25px;
-            }
-            
-            .modal-title {
-                font-size: 1.25rem;
-            }
-            
-            .modal-text {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 375px) {
-            .modal-body {
-                padding: 1.25rem;
-            }
-            
-            .modal-footer {
-                padding: 0 1.25rem 1.25rem;
-            }
-            
-            .modal-text {
-                font-size: 0.9375rem;
-            }
+            .modal-content { width: 95%; margin: 1rem; }
+            .modal-header { padding: 1.25rem 1.5rem 0; }
+            .modal-logo { max-width: 100px; }
+            .modal-body { padding: 1.25rem 1.5rem; }
+            .modal-footer { padding: 0 1.5rem 1.5rem; }
+            .modal-icon { width: 50px; height: 50px; margin-bottom: 1.25rem; }
+            .modal-icon i { width: 25px; height: 25px; }
+            .modal-title { font-size: 1.25rem; }
+            .modal-text { font-size: 1rem; }
         }
 
         .back-button {
@@ -608,14 +439,8 @@
         }
 
         @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.2;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
     </style>
 </head>
@@ -634,13 +459,13 @@
             </div>
             <div class="modal-body">
                 <div class="modal-icon">
-                    <i data-lucide="camera" class="w-12 h-12 text-blue-500"></i>
+                    <i data-lucide="camera"></i>
                 </div>
-                <h3 class="modal-title text-2xl font-bold text-white">📸 温馨提示</h3>
-                <p class="modal-text text-gray-300 leading-relaxed">把本页截图给班主任老师办理进班手续吧</p>
+                <h3 class="modal-title">温馨提示</h3>
+                <p class="modal-text" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
             </div>
             <div class="modal-footer">
-                <button id="modal-ok-btn" class="btn-primary px-8 py-3 text-lg font-semibold">确定</button>
+                <button id="modal-ok-btn" class="btn-primary">确定</button>
             </div>
         </div>
     </div>
@@ -654,46 +479,45 @@
         <div class="logo-container floating">
             <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程">
         </div>
-        <h1 class="text-3xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">成绩查询</h1>
-        <p class="text-center text-gray-400 mb-8 text-sm leading-relaxed">请输入学生姓名，查询审核结果</p>
+        <h1 class="text-3xl font-bold text-center mb-6">成绩查询</h1>
+        <p class="text-center text-gray-400 mb-8">请输入学生姓名，查询审核结果</p>
 
         <div id="search-container">
             <div class="input-container">
-                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off" class="focus:ring-2 focus:ring-blue-500">
-                <i data-lucide="search" class="icon text-gray-500"></i>
+                <input type="text" id="name-input" placeholder="请输入学生姓名" autocomplete="off">
+                <i data-lucide="search" class="icon"></i>
             </div>
-            <button id="search-btn" class="btn-primary w-full mt-4 py-3 text-lg">查询</button>
+            <button id="search-btn" class="btn-primary w-full">查询</button>
         </div>
 
         <div id="result-card" class="hidden mt-8 p-8 bg-gray-800 rounded-lg relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
             <div class="text-center">
                 <div class="result-icon inline-block mb-6">
-                    <i data-lucide="check-circle" class="inline-block w-24 h-24 text-green-500 drop-shadow-lg"></i>
+                    <i data-lucide="check-circle" class="inline-block w-20 h-20 text-green-500"></i>
                 </div>
-                <h2 class="text-2xl font-bold mb-4 text-green-400">🎉 恭喜审核通过！</h2>
-                <h3 class="text-xl font-semibold mb-3 text-white">恭喜 <span id="student-name"></span> 同学</h3>
-                <p class="text-lg text-gray-300 mb-6 font-medium" id="result-message"></p>
-                <div class="inline-block px-6 py-3 bg-green-900/40 text-green-300 rounded-full text-base font-medium shadow-lg">
+                <h2 class="text-2xl font-bold mb-3">恭喜审核通过！</h2>
+                <h3 class="text-xl font-semibold mb-4 text-gray-300">恭喜 <span id="student-name"></span> 同学</h3>
+                <p class="text-lg text-green-400 font-semibold mb-6" id="result-message"></p>
+                <div class="inline-block px-5 py-3 bg-green-900/30 text-green-300 rounded-full text-base">
                     <i data-lucide="award" class="inline-block w-5 h-5 mr-2"></i>
                     审核通过
                 </div>
-                
             </div>
         </div>
     </div>
 
     <script>
-        // ==================== 配置区域 START ====================
-        // TODO: cm6HRAQaUE5Z！
-        const SHEET_ID = 'cm6HRAQaUE5Z'; // 例如：从地址栏 `https://www.kdocs.cn/l/cm6HRAQaUE5Z`  中提取
-        // TODO: 调整数据范围，例如 A:B 表示读取A列和B列的全部数据。如果你的数据在100行以内，也可以设为 A1:B100
-        const DATA_RANGE = 'A:B';
-        // ==================== 配置区域 END ====================
+        // ============================================
+        // 核心配置（你只需要确保表格ID正确，其他通常无需修改）
+        // ============================================
+        const KINGSOFT_SHEET_ID = 'cm6HRAQaUE5Z'; // 你的金山文档表格ID
+        const DATA_RANGE = 'A:B'; // 读取A列和B列的所有行
 
-        // 全局变量，用于存储从表格获取的数据
-        let studentData = [];
-
+        // ============================================
+        // 全局变量与DOM元素
+        // ============================================
+        let studentData = []; // 存储从表格获取的数据
         const nameInput = document.getElementById('name-input');
         const searchBtn = document.getElementById('search-btn');
         const resultCard = document.getElementById('result-card');
@@ -703,201 +527,98 @@
         const toast = document.getElementById('toast');
         const backButton = document.getElementById('back-button');
         const canvasContainer = document.getElementById('canvas-container');
-        // 弹窗相关元素
         const infoModal = document.getElementById('info-modal');
         const modalOkBtn = document.getElementById('modal-ok-btn');
+        const modalText = document.getElementById('modal-text');
 
+        // ============================================
+        // 1. 初始化图标和基础UI
+        // ============================================
         lucide.createIcons();
 
-        // 创建星空背景
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                star.style.width = `${Math.random() * 3 + 1}px`;
-                star.style.height = star.style.width;
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // 初始化Three.js场景
-        function initThreeScene() {
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setClearColor(0x000000, 0);
-            canvasContainer.appendChild(renderer.domElement);
-
-            // 创建粒子系统
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 1500;
-
-            const posArray = new Float32Array(particlesCount * 3);
-
-            for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 10;
-            }
-
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.005,
-                color: 0x6366f1,
-                transparent: true,
-                opacity: 0.8
-            });
-
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
-
-            camera.position.z = 5;
-
-            // 动画循环
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                particlesMesh.rotation.y += 0.001;
-                particlesMesh.rotation.x += 0.0005;
-
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            // 响应窗口大小变化
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        }
-
-        function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-            
-            // 添加图标
-            const icon = document.createElement('i');
-            icon.setAttribute('data-lucide', type === 'error' ? 'x-circle' : 'check-circle');
-            toast.prepend(icon);
-            lucide.createIcons();
-            
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.innerHTML = '';
-                }, 300);
-            }, 3000);
-        }
-
-        function createConfetti() {
-            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#fff'];
-            for (let i = 0; i < 200; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                
-                // 随机形状
-                if (Math.random() > 0.5) {
-                    confetti.style.borderRadius = '50%';
-                } else {
-                    confetti.style.borderRadius = '0';
-                }
-                
-                confetti.style.left = `${Math.random() * 100}vw`;
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = `${Math.random() * 3}s`;
-                confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
-                
-                // 随机大小
-                const size = Math.random() * 10 + 5;
-                confetti.style.width = `${size}px`;
-                confetti.style.height = `${size}px`;
-                
-                document.body.appendChild(confetti);
-
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-
-        /**
-         * 从金山文档表格获取数据的主函数
-         */
+        // ============================================
+        // 2. 核心函数：从金山文档表格获取实时数据
+        // ============================================
         async function fetchDataFromKingsoftSheet() {
-            try {
-                // 1. 构造金山文档的公开API地址（无需认证，但表格需设为“可查看”）
-                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
-                
-                // 2. 发起网络请求
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error(`表格数据获取失败，状态码: ${response.status}`);
-                }
-                
-                // 3. 解析返回的JSON数据
-                const jsonData = await response.json();
-                console.log('从API返回的原始数据:', jsonData); // 调试用，了解数据结构
+            // 显示加载状态
+            const searchIcon = document.querySelector('.input-container .icon');
+            if (searchIcon) {
+                const originalIcon = searchIcon.getAttribute('data-lucide');
+                searchIcon.setAttribute('data-lucide', 'loader-2');
+                lucide.createIcons();
+                searchIcon.style.animation = 'spin 1s linear infinite';
+            }
 
-                // 4. 处理数据：将表格的二维数组转换为对象数组
-                // 假设API返回格式为 { cells: [ [表头1, 表头2], [数据1行1, 数据1行2], ... ] }
+            try {
+                // 构建金山文档公开API请求地址
+                const apiUrl = `https://www.kdocs.cn/api/office/p/file/${KINGSOFT_SHEET_ID}/sheet/0/range?range=${DATA_RANGE}`;
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error(`表格读取失败 (状态码: ${response.status})。请检查表格ID和分享权限。`);
+                }
+
+                const jsonData = await response.json();
+
+                // 调试：在控制台查看原始数据结构
+                console.log('API原始数据:', jsonData);
+
+                // 解析数据：假设API返回格式为 { cells: [ [姓名, 结果], ... ] }
                 const rows = jsonData.cells || [];
-                if (rows.length < 2) {
-                    console.warn('表格数据为空或仅包含表头');
+                if (rows.length === 0) {
+                    console.warn('表格数据为空');
                     studentData = [];
                     return;
                 }
 
-                // 跳过第一行表头（如果第一行是数据，则改为 rows.slice(0)）
-                const dataRows = rows.slice(1);
-                
-                // 转换为网站需要的格式：{ name: 'xxx', result: 'xxx' }
-                studentData = dataRows.map(row => ({
-                    name: String(row[0] || '').trim(),   // A列：姓名，去除首尾空格
-                    result: String(row[1] || '').trim()  // B列：结果
-                }));
+                // 转换为前端需要的格式
+                // 跳过可能存在的空行或表头（如果第一行是数据，去掉 .slice(1) 即可）
+                studentData = rows
+                    .filter(row => row && row.length >= 2 && row[0]) // 过滤有效行
+                    .map(row => ({
+                        name: String(row[0]).trim(),
+                        result: String(row[1] || '').trim()
+                    }));
 
-                console.log('数据转换成功，共', studentData.length, '条记录:', studentData);
+                console.log(`成功加载 ${studentData.length} 条学生数据。`);
+                showToast('数据已同步最新名单', 'success');
 
             } catch (error) {
-                console.error('加载表格数据时发生严重错误:', error);
-                // 可选：在这里可以设置一个友好的用户提示，或加载一个本地备份数据
-                // studentData = [...]; // 备份数据
+                console.error('从表格加载数据失败:', error);
+                showToast(`数据加载失败: ${error.message}`, 'error');
+                // 可选：使用一个本地备份数据，防止网站完全无法使用
+                // studentData = [...];
+            } finally {
+                // 恢复搜索图标
+                if (searchIcon) {
+                    searchIcon.setAttribute('data-lucide', 'search');
+                    searchIcon.style.animation = '';
+                    lucide.createIcons();
+                }
             }
         }
 
+        // ============================================
+        // 3. 核心函数：查询学生
+        // ============================================
         function searchStudent() {
             const name = nameInput.value.trim();
             if (!name) {
-                // 更新弹窗文案
-                const modalText = document.querySelector('.modal-text');
                 modalText.textContent = '请输入学生姓名';
-                
-                // 显示弹窗
-                infoModal.classList.remove('hidden');
-                setTimeout(() => {
-                    infoModal.classList.add('show');
-                }, 10);
+                showModal();
                 return;
             }
 
+            // 在实时数据中查找
             const student = studentData.find(s => s.name === name);
 
             if (student) {
-                // 先更新内容
+                // 找到学生
                 studentNameEl.textContent = student.name;
                 resultMessageEl.textContent = student.result;
-                
-                // 确保resultCard在正确的状态
+
+                // 动画显示结果
                 resultCard.classList.remove('show');
-                
                 gsap.to(searchContainer, {
                     opacity: 0,
                     y: -20,
@@ -906,78 +627,65 @@
                         searchContainer.classList.add('hidden');
                         resultCard.classList.remove('hidden');
                         backButton.classList.remove('hidden');
-                        lucide.createIcons();
-                        
-                        // 重置resultCard的transform状态
-                        gsap.set(resultCard, { opacity: 0, y: 20 });
-                        
                         setTimeout(() => {
-                            // 显示结果卡片
                             gsap.to(resultCard, {
                                 opacity: 1,
                                 y: 0,
                                 duration: 0.5,
                                 onComplete: () => {
                                     resultCard.classList.add('show');
+                                    createConfetti();
+                                    // 显示成功弹窗
+                                    modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
+                                    setTimeout(() => showModal(), 800);
                                 }
                             });
-                            
-                            createConfetti();
-                            
-                            // 添加卡片发光效果
-                            gsap.to('.card', {
-                                boxShadow: '0 0 25px rgba(99, 102, 241, 0.5)',
-                                duration: 0.5,
-                                yoyo: true,
-                                repeat: 1
-                            });
-                            
-                            // 延迟显示弹窗，让用户先看到结果
-                            setTimeout(() => {
-                                // 更新弹窗文案，包含孩子姓名
-                                const modalText = document.querySelector('.modal-text');
-                                modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
-                                
-                                infoModal.classList.remove('hidden');
-                                setTimeout(() => {
-                                    infoModal.classList.add('show');
-                                }, 10);
-                            }, 1000);
                         }, 100);
                     }
                 });
             } else {
-                // 添加输入框震动效果
-                gsap.fromTo(nameInput, 
+                // 未找到学生
+                modalText.textContent = `未找到姓名为 “${name}” 的学生，请核对姓名或联系老师。`;
+                showModal();
+                // 输入框震动提示
+                gsap.fromTo(nameInput,
                     { x: 0 },
-                    {
-                        x: 10, 
-                        duration: 0.1, 
-                        repeat: 5, 
-                        yoyo: true,
-                        onComplete: () => {
-                            gsap.set(nameInput, { x: 0 });
-                            
-                            // 更新弹窗文案
-                            const modalText = document.querySelector('.modal-text');
-                            modalText.textContent = '未找到该学生信息';
-                            
-                            // 显示弹窗
-                            infoModal.classList.remove('hidden');
-                            setTimeout(() => {
-                                infoModal.classList.add('show');
-                            }, 10);
-                        }
-                    }
+                    { x: 10, duration: 0.1, repeat: 5, yoyo: true, onComplete: () => gsap.set(nameInput, { x: 0 }) }
                 );
             }
+        }
+
+        // ============================================
+        // 4. 辅助函数（弹窗、提示、动画等）
+        // ============================================
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+            const icon = document.createElement('i');
+            icon.setAttribute('data-lucide', type === 'error' ? 'x-circle' : 'check-circle');
+            toast.prepend(icon);
+            lucide.createIcons();
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => { toast.innerHTML = ''; }, 300);
+            }, 3000);
+        }
+
+        function showModal() {
+            infoModal.classList.remove('hidden');
+            setTimeout(() => infoModal.classList.add('show'), 10);
+        }
+
+        function closeModal() {
+            infoModal.classList.remove('show');
+            setTimeout(() => infoModal.classList.add('hidden'), 300);
         }
 
         function resetSearch() {
             nameInput.value = '';
             resultCard.classList.remove('show');
             backButton.classList.add('hidden');
-            
             gsap.to(resultCard, {
                 opacity: 0,
                 y: 20,
@@ -985,7 +693,7 @@
                 onComplete: () => {
                     resultCard.classList.add('hidden');
                     searchContainer.classList.remove('hidden');
-                    gsap.fromTo(searchContainer, 
+                    gsap.fromTo(searchContainer,
                         { opacity: 0, y: -20 },
                         { opacity: 1, y: 0, duration: 0.5 }
                     );
@@ -993,117 +701,87 @@
             });
         }
 
-        // 关闭弹窗函数
-        function closeModal() {
-            infoModal.classList.remove('show');
-            setTimeout(() => {
-                infoModal.classList.add('hidden');
-            }, 300);
+        function createConfetti() {
+            const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = confetti.style.width;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
         }
 
-        /**
-         * 页面初始化
-         */
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完毕，开始初始化...');
-            
-            // 1. 加载表格数据
-            fetchDataFromKingsoftSheet();
-            
-            // 2. 创建星空背景和粒子效果
+        // 星空背景（保留原有效果）
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // ============================================
+        // 5. 页面加载初始化与事件绑定
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 初始化视觉效果
             createStars();
-            initThreeScene();
-            
-            // 3. 页面加载动画
-            gsap.fromTo('.card', 
+            // 初始化Three.js背景（可根据需要保留或移除）
+            // initThreeScene();
+
+            // 页面入场动画
+            gsap.fromTo('.card',
                 { opacity: 0, y: 50 },
-                {
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1, 
-                    ease: 'back.out(1.7)',
-                    onComplete: () => {
-                        // 输入框聚焦动画
-                        gsap.to(nameInput, {
-                            boxShadow: '0 0 15px rgba(99, 102, 241, 0.3)',
-                            duration: 1,
-                            yoyo: true,
-                            repeat: -1
-                        });
-                    }
-                }
+                { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' }
             );
+            gsap.fromTo('h1', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.3 });
+            gsap.fromTo('p', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.5 });
 
-            // 标题动画
-            gsap.fromTo('h1', 
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.8, delay: 0.3 }
-            );
+            // 首次加载数据
+            await fetchDataFromKingsoftSheet();
 
-            // 段落动画
-            gsap.fromTo('p', 
-                { opacity: 0 },
-                { opacity: 1, duration: 0.8, delay: 0.5 }
-            );
-            
-            // 4. 绑定查询按钮的点击事件
-            if (searchBtn) {
-                searchBtn.addEventListener('click', searchStudent);
-            }
-            
-            // 5. 绑定输入框的回车事件
-            if (nameInput) {
-                nameInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        searchStudent();
-                    }
-                });
-            }
-            
+            // 绑定事件
+            searchBtn.addEventListener('click', searchStudent);
+            nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchStudent(); });
             backButton.addEventListener('click', resetSearch);
-            resultCard.addEventListener('click', resetSearch);
-            
-            // 弹窗确定按钮点击事件
             modalOkBtn.addEventListener('click', closeModal);
-            
-            // 点击弹窗背景关闭弹窗
-            infoModal.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal-backdrop')) {
-                    closeModal();
-                }
-            });
-            
-            // 为输入框添加清除功能
-            nameInput.addEventListener('input', () => {
-                if (nameInput.value) {
-                    const clearIcon = document.querySelector('.icon');
-                    clearIcon.setAttribute('data-lucide', 'x');
+            infoModal.addEventListener('click', (e) => { if (e.target.classList.contains('modal-backdrop')) closeModal(); });
+
+            // 输入框动态效果
+            nameInput.addEventListener('input', function() {
+                const icon = document.querySelector('.input-container .icon');
+                if (this.value) {
+                    icon.setAttribute('data-lucide', 'x');
                     lucide.createIcons();
-                    clearIcon.addEventListener('click', () => {
-                        nameInput.value = '';
-                        clearIcon.setAttribute('data-lucide', 'search');
-                        lucide.createIcons();
-                    });
+                    // 点击X清空输入框
+                    icon.onclick = () => { nameInput.value = ''; icon.setAttribute('data-lucide', 'search'); lucide.createIcons(); };
                 } else {
-                    const clearIcon = document.querySelector('.icon');
-                    clearIcon.setAttribute('data-lucide', 'search');
+                    icon.setAttribute('data-lucide', 'search');
                     lucide.createIcons();
+                    icon.onclick = null;
                 }
             });
-            
-            // 添加鼠标移动视差效果
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth - 0.5;
-                const mouseY = e.clientY / window.innerHeight - 0.5;
-                
-                gsap.to('.card', {
-                    x: mouseX * 10,
-                    y: mouseY * 10,
-                    duration: 0.5
-                });
-            });
-            
-            console.log('初始化完成，网站已准备就绪。');
+
+            console.log('网站初始化完成，已连接至实时数据。');
+        });
+
+        // 可选：鼠标视差效果
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+            gsap.to('.card', { x: mouseX * 10, y: mouseY * 10, duration: 0.5 });
         });
     </script>
 </body>
