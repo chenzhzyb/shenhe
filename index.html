@@ -87,9 +87,65 @@
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
-        .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; position: relative; }
-        .logo-container img { max-width: 180px; width: 80%; filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5)); transition: transform 0.3s ease; }
-        .logo-container img:hover { transform: scale(1.05); }
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 2rem; 
+            position: relative;
+        }
+        .logo-text {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #6366f1);
+            background-size: 300% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            animation: gradient-shift 3s ease-in-out infinite, float 3s ease-in-out infinite;
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #6366f1);
+            background-size: 300% 100%;
+            border-radius: 0.5rem;
+            z-index: -1;
+            opacity: 0.1;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #6366f1);
+            background-size: 300% 100%;
+            border-radius: 0.75rem;
+            z-index: -2;
+            opacity: 0.2;
+            filter: blur(10px);
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .hidden { display: none; }
         .shine {
             position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
@@ -116,7 +172,7 @@
             h1 { font-size: 2rem !important; }
             .input-container input { font-size: 1rem; padding: 0.875rem 3rem 0.875rem 1rem; }
             .btn-primary { padding: 0.625rem 1.5rem; font-size: 1rem; }
-            .logo-container img { max-width: 150px; }
+            .logo-text { font-size: 2rem; }
             .card { margin: 1rem; }
             #result-card { padding: 1.5rem; }
             h2 { font-size: 1.5rem !important; }
@@ -246,8 +302,8 @@
     <div class="w-full max-w-md card relative overflow-hidden">
         <div class="shine"></div>
         <button id="back-button" class="back-button hidden"><i data-lucide="arrow-left"></i><span>返回</span></button>
-        <div class="logo-container floating">
-            <img src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c8bf2f58c69f476b8972729461bb49f5.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025123016442661B5625234694A36ED46&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767689066&x-signature=XoRaDyeXH8OZ77ixBPWYjHnJHDE%3D" alt="小鹿AI编程">
+        <div class="logo-container">
+            <div class="logo-text">小鹿AI编程</div>
         </div>
         <h1 class="text-3xl font-bold text-center mb-6">成绩查询</h1>
         <p class="text-center text-gray-400 mb-8">请输入学生姓名，查询审核结果</p>
@@ -304,7 +360,7 @@
         // ==================== 核心配置 ====================
         // 你的Google表格ID (已填写)
         const SPREADSHEET_ID = '1oAIRJO9vUgqLfy_sC62libWReRiHuwou_eCBdPZS27g';
-        // 你的表格工作表名称，默认为 Sheet1。如果你的表格底部标签页是其他名字（如“Sheet2”或“成绩单”），请修改此处。
+        // 你的表格工作表名称，默认为 Sheet1。如果你的表格底部标签页是其他名字（如"Sheet2"或"成绩单"），请修改此处。
         const SHEET_NAME = 'Sheet1';
         // 公开API地址 (无需更改)
         const PUBLIC_API_URL = `https://opensheet.elk.sh/${SPREADSHEET_ID}/${SHEET_NAME}`;
@@ -351,7 +407,7 @@
                 console.log('API返回的原始数据:', rawData);
 
                 // 关键：转换数据格式
-                // 假设你的表格表头行（第一行）两个单元格分别是“姓名”和“审核结果”
+                // 假设你的表格表头行（第一行）两个单元格分别是"姓名"和"审核结果"
                 // 如果表头文字不同，请修改下面对象中的属性名，例如 row["学生"] row["结果"]
                 studentData = rawData.map(row => ({
                     name: (row["姓名"] || row["name"] || row["学生"] || '').toString().trim(), // 适配不同列名
@@ -430,7 +486,7 @@
                 });
             } else {
                 // 未找到
-                modalText.textContent = `未找到姓名为 “${name}” 的学生，请核对姓名或联系老师。`;
+                modalText.textContent = `未找到姓名为 "${name}" 的学生，请核对姓名或联系老师。`;
                 showModal();
                 // 输入框震动提示
                 gsap.fromTo(nameInput, { x: 0 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true, onComplete: () => gsap.set(nameInput, { x: 0 }) });
@@ -551,6 +607,7 @@
             createStars();
             // 入场动画
             gsap.fromTo('.card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' });
+            gsap.fromTo('.logo-text', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.8, delay: 0.2 });
             gsap.fromTo('h1', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.3 });
             gsap.fromTo('p', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.5 });
 
