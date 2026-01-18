@@ -223,7 +223,7 @@
             <div class="modal-body">
                 <div class="modal-icon"><i data-lucide="camera"></i></div>
                 <h3 class="modal-title">温馨提示</h3>
-                <p class="modal-text" id="modal-text">把本页截图给班主任老师办理进班手续吧</p>
+                <p class="modal-text" id="modal-text">把本页截图给编程老师办理进班手续吧</p>
             </div>
             <div class="modal-footer"><button id="modal-ok-btn" class="btn-primary">确定</button></div>
         </div>
@@ -364,7 +364,7 @@
                                 onComplete: () => {
                                     resultCard.classList.add('show');
                                     createConfetti();
-                                    modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给班主任老师办理进班手续吧`;
+                                    modalText.textContent = `${student.name}家长，恭喜孩子通过本次选拔，抓紧时间把本页截图给编程老师办理进班手续吧`;
                                     setTimeout(() => showModal(), 800);
                                 }
                             });
